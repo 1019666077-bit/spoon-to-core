@@ -1,0 +1,11 @@
+node_modules/
+library/
+temp/
+local/
+build/
+profiles/
+dist/
+source_assets/
+*.log
+.DS_Store
+Thumbs.db
