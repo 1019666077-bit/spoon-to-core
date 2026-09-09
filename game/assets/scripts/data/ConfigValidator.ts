@@ -1,10 +1,14 @@
 import {
   CONFIG_ID_PATTERN,
   RARITIES,
+  type BackpackUpgradeTier,
   type BlockConfig,
+  type ConsumableConfig,
   type GameConfigs,
   type LayerConfig,
   type Rarity,
+  type RulesConfig,
+  type StaminaUpgradeTier,
   type ToolConfig,
   type TreasureConfig,
 } from "./types";
@@ -96,7 +100,12 @@ function parseShape(raw: unknown, path: string, errors: ConfigError[]): number[]
   return shape;
 }
 
-function parseTreasure(raw: unknown, path: string, errors: ConfigError[]): TreasureConfig | null {
+function parseTreasure(
+  raw: unknown,
+  path: string,
+  errors: ConfigError[],
+  layerIds: Set<string> | null,
+): TreasureConfig | null {
   if (!isRecord(raw)) {
     errors.push({ path, message: "expected object" });
     return null;
@@ -106,6 +115,8 @@ function parseTreasure(raw: unknown, path: string, errors: ConfigError[]): Treas
   const nameEn = asString(raw.nameEn);
   const rarity = asString(raw.rarity);
   const value = asFiniteNumber(raw.value);
+  const layerId = asString(raw.layerId) ?? "backyard";
+  const color = asString(raw.color) ?? "#9A9A9A";
   if (!id || !nameZh || !nameEn || !rarity || value === null) {
     errors.push({ path, message: "missing id, names, rarity, or value" });
     return null;
@@ -117,9 +128,21 @@ function parseTreasure(raw: unknown, path: string, errors: ConfigError[]): Treas
   if (value < 0) {
     errors.push({ path: `${path}.value`, message: "value must be >= 0" });
   }
+  if (layerIds && !layerIds.has(layerId)) {
+    errors.push({ path: `${path}.layerId`, message: `unknown layer "${layerId}"` });
+  }
   const shape = parseShape(raw.shape, `${path}.shape`, errors);
   if (!shape) return null;
-  return { id, nameZh, nameEn, rarity: rarity as Rarity, value, shape };
+  return {
+    id,
+    nameZh,
+    nameEn,
+    rarity: rarity as Rarity,
+    value,
+    shape,
+    layerId,
+    color,
+  };
 }
 
 function parseTool(raw: unknown, path: string, errors: ConfigError[]): ToolConfig | null {
@@ -146,10 +169,41 @@ function parseTool(raw: unknown, path: string, errors: ConfigError[]): ToolConfi
   return { id, nameZh, nameEn, power, attackInterval, price };
 }
 
+function parseWeights(
+  raw: unknown,
+  path: string,
+  blockIds: string[],
+  errors: ConfigError[],
+): Record<string, number> {
+  const weights: Record<string, number> = {};
+  if (raw === undefined) {
+    for (const id of blockIds) weights[id] = 1;
+    return weights;
+  }
+  if (!isRecord(raw)) {
+    errors.push({ path, message: "blockWeights must be an object" });
+    for (const id of blockIds) weights[id] = 1;
+    return weights;
+  }
+  for (const id of blockIds) {
+    const w = asFiniteNumber(raw[id]);
+    if (w === null || w < 0) {
+      errors.push({ path: `${path}.${id}`, message: "weight must be a number >= 0" });
+      weights[id] = 1;
+    } else {
+      weights[id] = w;
+    }
+  }
+  const sum = Object.values(weights).reduce((a, b) => a + b, 0);
+  if (sum <= 0) errors.push({ path, message: "blockWeights must sum to > 0" });
+  return weights;
+}
+
 function parseLayer(
   raw: unknown,
   path: string,
   blockIds: Set<string>,
+  treasureIds: Set<string>,
   errors: ConfigError[],
 ): LayerConfig | null {
   if (!isRecord(raw)) {
@@ -184,7 +238,156 @@ function parseLayer(
   if (ids.length === 0) {
     errors.push({ path: `${path}.blockIds`, message: "layer needs at least one block" });
   }
-  return { id, nameZh, nameEn, depthMin, depthMax, blockIds: ids };
+  const layerTreasureIds: string[] = [];
+  if (Array.isArray(raw.treasureIds)) {
+    raw.treasureIds.forEach((item, i) => {
+      const tid = asString(item);
+      if (!tid) {
+        errors.push({ path: `${path}.treasureIds[${i}]`, message: "treasure id must be a string" });
+        return;
+      }
+      if (!treasureIds.has(tid)) {
+        errors.push({ path: `${path}.treasureIds[${i}]`, message: `unknown treasure "${tid}"` });
+      }
+      layerTreasureIds.push(tid);
+    });
+  }
+  const recommendedPower = asFiniteNumber(raw.recommendedPower) ?? 1;
+  if (recommendedPower < 1) {
+    errors.push({ path: `${path}.recommendedPower`, message: "recommendedPower must be >= 1" });
+  }
+  const generator = asString(raw.generator) ?? id;
+  const hazards: string[] = [];
+  if (Array.isArray(raw.hazards)) {
+    raw.hazards.forEach((item) => {
+      const h = asString(item);
+      if (h) hazards.push(h);
+    });
+  }
+  const blockWeights = parseWeights(raw.blockWeights, `${path}.blockWeights`, ids, errors);
+  return {
+    id,
+    nameZh,
+    nameEn,
+    depthMin,
+    depthMax,
+    blockIds: ids,
+    blockWeights,
+    treasureIds: layerTreasureIds,
+    recommendedPower,
+    generator,
+    hazards,
+  };
+}
+
+function parseStaminaTier(raw: unknown, path: string, errors: ConfigError[]): StaminaUpgradeTier | null {
+  if (!isRecord(raw)) {
+    errors.push({ path, message: "expected object" });
+    return null;
+  }
+  const level = asFiniteNumber(raw.level);
+  const max = asFiniteNumber(raw.max);
+  const price = asFiniteNumber(raw.price);
+  if (level === null || max === null || price === null) {
+    errors.push({ path, message: "missing level, max, or price" });
+    return null;
+  }
+  if (level < 0 || max < 1 || price < 0) {
+    errors.push({ path, message: "stamina tier values out of range" });
+  }
+  return { level, max, price };
+}
+
+function parseBackpackTier(raw: unknown, path: string, errors: ConfigError[]): BackpackUpgradeTier | null {
+  if (!isRecord(raw)) {
+    errors.push({ path, message: "expected object" });
+    return null;
+  }
+  const level = asFiniteNumber(raw.level);
+  const cols = asFiniteNumber(raw.cols);
+  const rows = asFiniteNumber(raw.rows);
+  const price = asFiniteNumber(raw.price);
+  if (level === null || cols === null || rows === null || price === null) {
+    errors.push({ path, message: "missing level, cols, rows, or price" });
+    return null;
+  }
+  if (level < 0 || cols < 1 || rows < 1 || price < 0) {
+    errors.push({ path, message: "backpack tier values out of range" });
+  }
+  return { level, cols, rows, price };
+}
+
+function parseConsumable(raw: unknown, path: string, errors: ConfigError[]): ConsumableConfig | null {
+  if (!isRecord(raw)) {
+    errors.push({ path, message: "expected object" });
+    return null;
+  }
+  const id = asString(raw.id);
+  const nameZh = asString(raw.nameZh);
+  const nameEn = asString(raw.nameEn);
+  const price = asFiniteNumber(raw.price);
+  const maxPerRun = asFiniteNumber(raw.maxPerRun);
+  if (!id || !nameZh || !nameEn || price === null || maxPerRun === null) {
+    errors.push({ path, message: "missing id, names, price, or maxPerRun" });
+    return null;
+  }
+  checkId(id, `${path}.id`, errors);
+  if (price < 0) errors.push({ path: `${path}.price`, message: "price must be >= 0" });
+  if (maxPerRun < 1) errors.push({ path: `${path}.maxPerRun`, message: "maxPerRun must be >= 1" });
+  return { id, nameZh, nameEn, price, maxPerRun };
+}
+
+const RULE_DEFAULTS: RulesConfig = {
+  mapWidth: 12,
+  mapDepth: 40,
+  cellSize: 64,
+  visibleRows: 9,
+  critChance: 0.05,
+  critMultiplier: 2,
+  staminaPerHit: 1,
+  lowStaminaRatio: 0.25,
+  lastStruggleSeconds: 10,
+  returnHoldSeconds: 0.8,
+  fullBagTimeScale: 0.2,
+  firstTreasureSeconds: 20,
+  firstRareSeconds: 90,
+  dropIntervalMin: 6,
+  dropIntervalMax: 10,
+  firstRunMinGold: 90,
+  firstRunStaminaGift: 20,
+  firstFindBonus: 0.5,
+  insureSlotsBase: 1,
+  tutorialSeed: 10001,
+  bagAlmostFullRatio: 0.75,
+  hazardStaminaPenalty: 2,
+  floodedStaminaMul: 1.3,
+  tutorialTextMaxChars: 16,
+  minAttackInterval: 0.12,
+};
+
+function parseRules(raw: unknown, errors: ConfigError[]): RulesConfig {
+  if (raw === undefined) return { ...RULE_DEFAULTS };
+  if (!isRecord(raw)) {
+    errors.push({ path: "rules", message: "rules must be an object" });
+    return { ...RULE_DEFAULTS };
+  }
+  const rules: RulesConfig = { ...RULE_DEFAULTS };
+  (Object.keys(RULE_DEFAULTS) as (keyof RulesConfig)[]).forEach((key) => {
+    if (raw[key] === undefined) return;
+    const n = asFiniteNumber(raw[key]);
+    if (n === null) {
+      errors.push({ path: `rules.${key}`, message: "must be a finite number" });
+      return;
+    }
+    if (n < 0) errors.push({ path: `rules.${key}`, message: "must be >= 0" });
+    (rules[key] as number) = n;
+  });
+  if (rules.mapWidth < 3) errors.push({ path: "rules.mapWidth", message: "mapWidth must be >= 3" });
+  if (rules.mapDepth < 8) errors.push({ path: "rules.mapDepth", message: "mapDepth must be >= 8" });
+  if (rules.dropIntervalMax < rules.dropIntervalMin) {
+    errors.push({ path: "rules.dropInterval", message: "dropIntervalMax must be >= dropIntervalMin" });
+  }
+  return rules;
 }
 
 export function validateConfigs(raw: unknown): ConfigValidationResult {
@@ -215,11 +418,17 @@ export function validateConfigs(raw: unknown): ConfigValidationResult {
       }
     });
   }
+  const layerIdPreview = new Set<string>();
+  if (Array.isArray(raw.layers)) {
+    raw.layers.forEach((item) => {
+      if (isRecord(item) && typeof item.id === "string") layerIdPreview.add(item.id);
+    });
+  }
   const treasures: TreasureConfig[] = [];
   const treasureIds = new Set<string>();
   if (Array.isArray(raw.treasures)) {
     raw.treasures.forEach((item, i) => {
-      const parsed = parseTreasure(item, `treasures[${i}]`, errors);
+      const parsed = parseTreasure(item, `treasures[${i}]`, errors, layerIdPreview.size > 0 ? layerIdPreview : null);
       if (parsed) {
         pushUnique(treasureIds, parsed.id, `treasures[${i}].id`, errors);
         treasures.push(parsed);
@@ -241,13 +450,63 @@ export function validateConfigs(raw: unknown): ConfigValidationResult {
   const layerIds = new Set<string>();
   if (Array.isArray(raw.layers)) {
     raw.layers.forEach((item, i) => {
-      const parsed = parseLayer(item, `layers[${i}]`, blockIds, errors);
+      const parsed = parseLayer(item, `layers[${i}]`, blockIds, treasureIds, errors);
       if (parsed) {
         pushUnique(layerIds, parsed.id, `layers[${i}].id`, errors);
         layers.push(parsed);
       }
     });
   }
+
+  const stamina: StaminaUpgradeTier[] = [];
+  const backpack: BackpackUpgradeTier[] = [];
+  if (isRecord(raw.upgrades)) {
+    if (Array.isArray(raw.upgrades.stamina)) {
+      raw.upgrades.stamina.forEach((item, i) => {
+        const parsed = parseStaminaTier(item, `upgrades.stamina[${i}]`, errors);
+        if (parsed) stamina.push(parsed);
+      });
+    }
+    if (Array.isArray(raw.upgrades.backpack)) {
+      raw.upgrades.backpack.forEach((item, i) => {
+        const parsed = parseBackpackTier(item, `upgrades.backpack[${i}]`, errors);
+        if (parsed) backpack.push(parsed);
+      });
+    }
+  } else {
+    errors.push({ path: "upgrades", message: "need upgrades.stamina and upgrades.backpack" });
+  }
+  if (stamina.length === 0) errors.push({ path: "upgrades.stamina", message: "need at least one stamina tier" });
+  if (backpack.length === 0) errors.push({ path: "upgrades.backpack", message: "need at least one backpack tier" });
+
+  const consumables: ConsumableConfig[] = [];
+  const consumableIds = new Set<string>();
+  if (Array.isArray(raw.consumables)) {
+    raw.consumables.forEach((item, i) => {
+      const parsed = parseConsumable(item, `consumables[${i}]`, errors);
+      if (parsed) {
+        pushUnique(consumableIds, parsed.id, `consumables[${i}].id`, errors);
+        consumables.push(parsed);
+      }
+    });
+  } else {
+    errors.push({ path: "consumables", message: "need consumables array" });
+  }
+
+  const rules = parseRules(raw.rules, errors);
+
   if (errors.length > 0) return { ok: false, configs: null, errors };
-  return { ok: true, configs: { blocks, treasures, tools, layers }, errors: [] };
+  return {
+    ok: true,
+    configs: {
+      blocks,
+      treasures,
+      tools,
+      layers,
+      upgrades: { stamina, backpack },
+      consumables,
+      rules,
+    },
+    errors: [],
+  };
 }

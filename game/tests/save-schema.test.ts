@@ -10,21 +10,40 @@ import {
 } from "../assets/scripts/save/SaveSchema";
 
 describe("save schema and migration", () => {
-  it("default save uses schemaVersion 1 and safe zeros", () => {
+  it("default save uses current schemaVersion and safe zeros", () => {
     const save = createDefaultSave(1000);
     assert.equal(save.schemaVersion, SAVE_SCHEMA_VERSION);
     assert.equal(save.gold, 0);
     assert.equal(save.upgrades.toolId, "rusty_spoon");
     assert.deepEqual(save.unlockedLayerIds, ["backyard"]);
     assert.equal(save.lastSafeSaveAt, 1000);
+    assert.equal(save.tutorialCompleted, false);
+    assert.equal(save.consumableStock.dynamite, 0);
   });
 
   it("migrates a v0 blob and keeps gold", () => {
     const result = migrateSave({ schemaVersion: 0, gold: 50 }, 2000);
     assert.equal(result.migrated, true);
-    assert.equal(result.save.schemaVersion, 1);
+    assert.equal(result.save.schemaVersion, SAVE_SCHEMA_VERSION);
     assert.equal(result.save.gold, 50);
     assert.ok(result.errors.includes("migrated-from-v0"));
+  });
+
+  it("migrates a v1 blob into catalog/unlock fields", () => {
+    const result = migrateSave(
+      {
+        schemaVersion: 1,
+        gold: 40,
+        upgrades: { toolId: "steel_spoon", staminaLevel: 1, backpackLevel: 0 },
+        unlockedLayerIds: ["backyard"],
+      },
+      3,
+    );
+    assert.equal(result.save.schemaVersion, SAVE_SCHEMA_VERSION);
+    assert.equal(result.save.upgrades.toolId, "steel_spoon");
+    assert.equal(result.save.upgrades.staminaLevel, 1);
+    assert.deepEqual(result.save.catalog, {});
+    assert.ok(result.migrated);
   });
 
   it("falls back to defaults on garbage input", () => {
@@ -39,12 +58,12 @@ describe("save schema and migration", () => {
     await platform.initialize();
     const saves = new SaveManager(platform, () => 1234);
     const loaded = saves.load();
-    assert.equal(loaded.save.schemaVersion, 1);
+    assert.equal(loaded.save.schemaVersion, SAVE_SCHEMA_VERSION);
     loaded.save.gold = 12;
     assert.equal(saves.write(loaded.save), true);
     const again = new SaveManager(platform, () => 9999).load();
     assert.equal(again.save.gold, 12);
-    assert.equal(again.save.schemaVersion, 1);
+    assert.equal(again.save.schemaVersion, SAVE_SCHEMA_VERSION);
   });
 
   it("recovers from corrupt primary JSON using the backup", async () => {

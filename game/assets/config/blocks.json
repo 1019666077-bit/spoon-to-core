@@ -26,5 +26,82 @@
     "nameEn": "Hard Rock",
     "hp": 7,
     "color": "#4A4F57"
+  },
+  {
+    "id": "brick",
+    "nameZh": "砖块",
+    "nameEn": "Brick",
+    "hp": 3,
+    "color": "#A0522D"
+  },
+  {
+    "id": "ancient_brick",
+    "nameZh": "古砖",
+    "nameEn": "Ancient Brick",
+    "hp": 8,
+    "color": "#8B3A2A"
+  },
+  {
+    "id": "scrap_metal",
+    "nameZh": "金属废料",
+    "nameEn": "Scrap Metal",
+    "hp": 10,
+    "color": "#6E7B80"
+  },
+  {
+    "id": "fossil_rock",
+    "nameZh": "化石岩",
+    "nameEn": "Fossil Rock",
+    "hp": 12,
+    "color": "#C4A35A"
+  },
+  {
+    "id": "resin",
+    "nameZh": "树脂块",
+    "nameEn": "Resin",
+    "hp": 9,
+    "color": "#D4A017"
+  },
+  {
+    "id": "coral",
+    "nameZh": "珊瑚岩",
+    "nameEn": "Coral",
+    "hp": 15,
+    "color": "#E07A8A"
+  },
+  {
+    "id": "salt",
+    "nameZh": "盐晶",
+    "nameEn": "Salt Crystal Block",
+    "hp": 6,
+    "color": "#E8E0D0"
+  },
+  {
+    "id": "wreck_wood",
+    "nameZh": "沉船木板",
+    "nameEn": "Wreck Wood",
+    "hp": 5,
+    "color": "#6B4A2A"
+  },
+  {
+    "id": "obsidian",
+    "nameZh": "黑曜石",
+    "nameEn": "Obsidian",
+    "hp": 22,
+    "color": "#1A1228"
+  },
+  {
+    "id": "core_alloy",
+    "nameZh": "地心合金",
+    "nameEn": "Core Alloy",
+    "hp": 35,
+    "color": "#FF6A2A"
+  },
+  {
+    "id": "energy_crystal",
+    "nameZh": "能量晶体",
+    "nameEn": "Energy Crystal",
+    "hp": 18,
+    "color": "#A45CFF"
   }
 ]

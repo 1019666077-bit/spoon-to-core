@@ -9,7 +9,8 @@
   "type": "module",
   "scripts": {
     "test": "tsx --test tests/*.test.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "sync-config": "tsx scripts/write-configs.mjs"
   },
   "devDependencies": {
     "tsx": "4.19.4",

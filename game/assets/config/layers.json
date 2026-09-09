@@ -9,7 +9,177 @@
       "loose_soil",
       "clay",
       "rubble",
+      "brick",
       "hard_rock"
+    ],
+    "blockWeights": {
+      "loose_soil": 48,
+      "clay": 24,
+      "rubble": 14,
+      "brick": 10,
+      "hard_rock": 4
+    },
+    "treasureIds": [
+      "rusty_coin",
+      "dead_phone",
+      "neighbor_key",
+      "mud_soda",
+      "old_cartridge",
+      "silver_spoon",
+      "forgotten_safe",
+      "underground_letter",
+      "squeaky_duck",
+      "no_dig_sign"
+    ],
+    "recommendedPower": 1,
+    "generator": "backyard",
+    "hazards": [
+      "leaky_pipe"
+    ]
+  },
+  {
+    "id": "lost_city",
+    "nameZh": "失落古城",
+    "nameEn": "Lost City",
+    "depthMin": 50,
+    "depthMax": 300,
+    "blockIds": [
+      "hard_rock",
+      "ancient_brick",
+      "scrap_metal",
+      "clay"
+    ],
+    "blockWeights": {
+      "hard_rock": 38,
+      "ancient_brick": 32,
+      "scrap_metal": 20,
+      "clay": 10
+    },
+    "treasureIds": [
+      "cracked_shard",
+      "bronze_clasp",
+      "faceless_statue",
+      "bronze_bell",
+      "royal_fork",
+      "half_map",
+      "mechanism_core",
+      "blinking_mural",
+      "nameless_crown",
+      "ancient_takeout",
+      "rune_shard"
+    ],
+    "recommendedPower": 2,
+    "generator": "lost_city",
+    "hazards": [
+      "falling_rock"
+    ]
+  },
+  {
+    "id": "dino_grave",
+    "nameZh": "恐龙墓场",
+    "nameEn": "Dinosaur Graveyard",
+    "depthMin": 300,
+    "depthMax": 2000,
+    "blockIds": [
+      "fossil_rock",
+      "hard_rock",
+      "resin",
+      "clay"
+    ],
+    "blockWeights": {
+      "fossil_rock": 40,
+      "hard_rock": 28,
+      "resin": 22,
+      "clay": 10
+    },
+    "treasureIds": [
+      "shell_fossil",
+      "fern_fossil",
+      "amber_beetle",
+      "small_claw",
+      "dino_egg",
+      "saber_tooth",
+      "glowing_amber",
+      "giant_rib",
+      "mini_skeleton",
+      "dino_member_card"
+    ],
+    "recommendedPower": 3,
+    "generator": "dino_grave",
+    "hazards": [
+      "gas_pocket"
+    ]
+  },
+  {
+    "id": "undersea",
+    "nameZh": "地下海",
+    "nameEn": "Underground Sea",
+    "depthMin": 2000,
+    "depthMax": 100000,
+    "blockIds": [
+      "coral",
+      "salt",
+      "wreck_wood",
+      "clay"
+    ],
+    "blockWeights": {
+      "coral": 38,
+      "salt": 26,
+      "wreck_wood": 26,
+      "clay": 10
+    },
+    "treasureIds": [
+      "salt_crystal",
+      "algae_bottle",
+      "wreck_silver",
+      "black_pearl",
+      "captain_compass",
+      "deep_phonograph",
+      "giant_scale",
+      "gold_cup",
+      "abyss_eye",
+      "waterproof_toaster"
+    ],
+    "recommendedPower": 5,
+    "generator": "undersea",
+    "hazards": [
+      "flood"
+    ]
+  },
+  {
+    "id": "core",
+    "nameZh": "地心文明",
+    "nameEn": "Core Civilization",
+    "depthMin": 100000,
+    "depthMax": 6371000,
+    "blockIds": [
+      "obsidian",
+      "core_alloy",
+      "energy_crystal",
+      "hard_rock"
+    ],
+    "blockWeights": {
+      "obsidian": 38,
+      "core_alloy": 28,
+      "energy_crystal": 22,
+      "hard_rock": 12
+    },
+    "treasureIds": [
+      "obsidian_shard",
+      "energy_gem",
+      "core_gear",
+      "lava_glass_flower",
+      "antigrav_screw",
+      "machine_heart",
+      "tiny_sun",
+      "core_pass",
+      "world_core_shard",
+      "god_soup_bowl"
+    ],
+    "recommendedPower": 8,
+    "generator": "core",
+    "hazards": [
+      "heat_wave"
     ]
   }
 ]

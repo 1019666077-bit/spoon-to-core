@@ -84,8 +84,31 @@ function migrateUnlocked(raw: unknown, fallback: string[]): string[] {
   return ids.length > 0 ? ids : [...fallback];
 }
 
+function migrateStringArray(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.filter((item): item is string => typeof item === "string" && item.length > 0);
+}
+
+function migrateDepth(raw: unknown): Record<string, number> {
+  if (!isRecord(raw)) return {};
+  const out: Record<string, number> = {};
+  for (const [id, value] of Object.entries(raw)) {
+    if (typeof value === "number" && Number.isFinite(value) && value >= 0) out[id] = value;
+  }
+  return out;
+}
+
+function migrateStock(raw: unknown, fallback: Record<string, number>): Record<string, number> {
+  const out = { ...fallback };
+  if (!isRecord(raw)) return out;
+  for (const [id, value] of Object.entries(raw)) {
+    if (typeof value === "number" && Number.isFinite(value) && value >= 0) out[id] = value;
+  }
+  return out;
+}
+
 /**
- * Accepts any historical blob and returns a v1 save.
+ * Accepts any historical blob and returns the current schema.
  * Unknown future versions fall back to defaults and keep an error flag.
  */
 export function migrateSave(raw: unknown, now: number = 0): MigrationResult {
@@ -115,6 +138,13 @@ export function migrateSave(raw: unknown, now: number = 0): MigrationResult {
     entitlements: { ads: {}, iap: {} },
     lastSafeSaveAt: num(raw.lastSafeSaveAt, now, 0),
     bootCount: num(raw.bootCount, defaults.bootCount, 0),
+    tutorialCompleted: bool(raw.tutorialCompleted, defaults.tutorialCompleted),
+    tutorialStep: num(raw.tutorialStep, defaults.tutorialStep, 0),
+    runCount: num(raw.runCount, defaults.runCount, 0),
+    settledRunIds: migrateStringArray(raw.settledRunIds),
+    bestDepthByLayer: migrateDepth(raw.bestDepthByLayer),
+    selectedLayerId: str(raw.selectedLayerId, defaults.selectedLayerId),
+    consumableStock: migrateStock(raw.consumableStock, defaults.consumableStock),
   };
 
   const migrated = version < SAVE_SCHEMA_VERSION;

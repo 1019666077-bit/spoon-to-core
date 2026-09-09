@@ -1,0 +1,16 @@
+[
+  {
+    "id": "dynamite",
+    "nameZh": "小炸药",
+    "nameEn": "Dynamite",
+    "price": 80,
+    "maxPerRun": 3
+  },
+  {
+    "id": "energy_drink",
+    "nameZh": "能量饮料",
+    "nameEn": "Energy Drink",
+    "price": 60,
+    "maxPerRun": 2
+  }
+]

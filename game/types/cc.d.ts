@@ -16,11 +16,19 @@ declare module "cc" {
     getComponent<T>(ctor: new () => T): T | null;
     setPosition(x: number, y: number, z?: number): void;
     on(type: string, callback: (...args: unknown[]) => void, target?: unknown): void;
+    removeAllChildren(): void;
+    static EventType: {
+      TOUCH_START: string;
+      TOUCH_MOVE: string;
+      TOUCH_END: string;
+      TOUCH_CANCEL: string;
+    };
   }
 
   export class Component {
     node: Node;
     start?(): void;
+    update?(dt: number): void;
     onDestroy?(): void;
     addComponent<T>(ctor: new () => T): T;
     getComponent<T>(ctor: new () => T): T | null;
@@ -52,9 +60,15 @@ declare module "cc" {
 
   export class Graphics extends Component {
     fillColor: Color;
+    strokeColor: Color;
+    lineWidth: number;
     rect(x: number, y: number, w: number, h: number): void;
     roundRect(x: number, y: number, w: number, h: number, r: number): void;
+    circle(x: number, y: number, r: number): void;
+    moveTo(x: number, y: number): void;
+    lineTo(x: number, y: number): void;
     fill(): void;
+    stroke(): void;
     clear(): void;
   }
 

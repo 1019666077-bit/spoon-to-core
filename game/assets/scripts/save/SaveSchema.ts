@@ -1,4 +1,4 @@
-export const SAVE_SCHEMA_VERSION = 1;
+export const SAVE_SCHEMA_VERSION = 2;
 export const SAVE_KEY = "spoon-to-core.save";
 export const SAVE_BACKUP_KEY = "spoon-to-core.save.bak";
 
@@ -38,6 +38,13 @@ export type SaveData = {
   };
   lastSafeSaveAt: number;
   bootCount: number;
+  tutorialCompleted: boolean;
+  tutorialStep: number;
+  runCount: number;
+  settledRunIds: string[];
+  bestDepthByLayer: Record<string, number>;
+  selectedLayerId: string;
+  consumableStock: Record<string, number>;
 };
 
 export function createDefaultSave(now: number = 0): SaveData {
@@ -63,5 +70,12 @@ export function createDefaultSave(now: number = 0): SaveData {
     entitlements: { ads: {}, iap: {} },
     lastSafeSaveAt: now,
     bootCount: 0,
+    tutorialCompleted: false,
+    tutorialStep: 0,
+    runCount: 0,
+    settledRunIds: [],
+    bestDepthByLayer: {},
+    selectedLayerId: "backyard",
+    consumableStock: { dynamite: 0, energy_drink: 0 },
   };
 }

@@ -5,7 +5,13 @@
     "nameEn": "Rusty Coin",
     "rarity": "common",
     "value": 8,
-    "shape": [[1]]
+    "shape": [
+      [
+        1
+      ]
+    ],
+    "layerId": "backyard",
+    "color": "#9A9A9A"
   },
   {
     "id": "dead_phone",
@@ -13,7 +19,16 @@
     "nameEn": "Dead Phone",
     "rarity": "common",
     "value": 15,
-    "shape": [[1], [1]]
+    "shape": [
+      [
+        1
+      ],
+      [
+        1
+      ]
+    ],
+    "layerId": "backyard",
+    "color": "#9A9A9A"
   },
   {
     "id": "neighbor_key",
@@ -21,7 +36,13 @@
     "nameEn": "Neighbor's Key",
     "rarity": "uncommon",
     "value": 30,
-    "shape": [[1]]
+    "shape": [
+      [
+        1
+      ]
+    ],
+    "layerId": "backyard",
+    "color": "#3D9E5F"
   },
   {
     "id": "mud_soda",
@@ -29,7 +50,16 @@
     "nameEn": "Muddy Soda Bottle",
     "rarity": "uncommon",
     "value": 42,
-    "shape": [[1], [1]]
+    "shape": [
+      [
+        1
+      ],
+      [
+        1
+      ]
+    ],
+    "layerId": "backyard",
+    "color": "#3D9E5F"
   },
   {
     "id": "old_cartridge",
@@ -37,6 +67,779 @@
     "nameEn": "Old Game Cartridge",
     "rarity": "uncommon",
     "value": 55,
-    "shape": [[1]]
+    "shape": [
+      [
+        1
+      ]
+    ],
+    "layerId": "backyard",
+    "color": "#3D9E5F"
+  },
+  {
+    "id": "silver_spoon",
+    "nameZh": "银色纪念勺",
+    "nameEn": "Silver Spoon",
+    "rarity": "rare",
+    "value": 110,
+    "shape": [
+      [
+        1
+      ]
+    ],
+    "layerId": "backyard",
+    "color": "#3B82C4"
+  },
+  {
+    "id": "forgotten_safe",
+    "nameZh": "被遗忘的保险箱",
+    "nameEn": "Forgotten Safe",
+    "rarity": "rare",
+    "value": 180,
+    "shape": [
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "layerId": "backyard",
+    "color": "#3B82C4"
+  },
+  {
+    "id": "underground_letter",
+    "nameZh": "地下情书",
+    "nameEn": "Underground Letter",
+    "rarity": "rare",
+    "value": 140,
+    "shape": [
+      [
+        1
+      ]
+    ],
+    "layerId": "backyard",
+    "color": "#3B82C4"
+  },
+  {
+    "id": "squeaky_duck",
+    "nameZh": "会响的塑料鸭",
+    "nameEn": "Squeaky Duck",
+    "rarity": "epic",
+    "value": 320,
+    "shape": [
+      [
+        1
+      ],
+      [
+        1
+      ]
+    ],
+    "layerId": "backyard",
+    "color": "#8B5CF6"
+  },
+  {
+    "id": "no_dig_sign",
+    "nameZh": "禁止挖掘路牌",
+    "nameEn": "No Digging Sign",
+    "rarity": "absurd",
+    "value": 260,
+    "shape": [
+      [
+        1,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "layerId": "backyard",
+    "color": "#E07A2F"
+  },
+  {
+    "id": "cracked_shard",
+    "nameZh": "破裂陶片",
+    "nameEn": "Cracked Shard",
+    "rarity": "common",
+    "value": 18,
+    "shape": [
+      [
+        1
+      ]
+    ],
+    "layerId": "lost_city",
+    "color": "#9A9A9A"
+  },
+  {
+    "id": "bronze_clasp",
+    "nameZh": "古城铜扣",
+    "nameEn": "Bronze Clasp",
+    "rarity": "common",
+    "value": 22,
+    "shape": [
+      [
+        1
+      ]
+    ],
+    "layerId": "lost_city",
+    "color": "#9A9A9A"
+  },
+  {
+    "id": "faceless_statue",
+    "nameZh": "无脸石像",
+    "nameEn": "Faceless Statue",
+    "rarity": "uncommon",
+    "value": 65,
+    "shape": [
+      [
+        1,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "layerId": "lost_city",
+    "color": "#3D9E5F"
+  },
+  {
+    "id": "bronze_bell",
+    "nameZh": "青铜小铃",
+    "nameEn": "Bronze Bell",
+    "rarity": "uncommon",
+    "value": 75,
+    "shape": [
+      [
+        1
+      ]
+    ],
+    "layerId": "lost_city",
+    "color": "#3D9E5F"
+  },
+  {
+    "id": "royal_fork",
+    "nameZh": "王室餐叉",
+    "nameEn": "Royal Fork",
+    "rarity": "rare",
+    "value": 130,
+    "shape": [
+      [
+        1
+      ]
+    ],
+    "layerId": "lost_city",
+    "color": "#3B82C4"
+  },
+  {
+    "id": "half_map",
+    "nameZh": "半张地下地图",
+    "nameEn": "Half Map",
+    "rarity": "rare",
+    "value": 170,
+    "shape": [
+      [
+        1
+      ]
+    ],
+    "layerId": "lost_city",
+    "color": "#3B82C4"
+  },
+  {
+    "id": "mechanism_core",
+    "nameZh": "机关核心",
+    "nameEn": "Mechanism Core",
+    "rarity": "rare",
+    "value": 210,
+    "shape": [
+      [
+        1
+      ],
+      [
+        1
+      ]
+    ],
+    "layerId": "lost_city",
+    "color": "#3B82C4"
+  },
+  {
+    "id": "blinking_mural",
+    "nameZh": "会眨眼的壁画",
+    "nameEn": "Blinking Mural",
+    "rarity": "epic",
+    "value": 480,
+    "shape": [
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "layerId": "lost_city",
+    "color": "#8B5CF6"
+  },
+  {
+    "id": "nameless_crown",
+    "nameZh": "无名王冠",
+    "nameEn": "Nameless Crown",
+    "rarity": "legendary",
+    "value": 1100,
+    "shape": [
+      [
+        1
+      ],
+      [
+        1
+      ],
+      [
+        1
+      ]
+    ],
+    "layerId": "lost_city",
+    "color": "#E8B84A"
+  },
+  {
+    "id": "ancient_takeout",
+    "nameZh": "古人外卖订单",
+    "nameEn": "Ancient Takeout",
+    "rarity": "absurd",
+    "value": 360,
+    "shape": [
+      [
+        1
+      ]
+    ],
+    "layerId": "lost_city",
+    "color": "#E07A2F"
+  },
+  {
+    "id": "rune_shard",
+    "nameZh": "符文碎片",
+    "nameEn": "Rune Shard",
+    "rarity": "uncommon",
+    "value": 40,
+    "shape": [
+      [
+        1
+      ]
+    ],
+    "layerId": "lost_city",
+    "color": "#3D9E5F"
+  },
+  {
+    "id": "shell_fossil",
+    "nameZh": "普通贝壳化石",
+    "nameEn": "Shell Fossil",
+    "rarity": "common",
+    "value": 35,
+    "shape": [
+      [
+        1
+      ]
+    ],
+    "layerId": "dino_grave",
+    "color": "#9A9A9A"
+  },
+  {
+    "id": "fern_fossil",
+    "nameZh": "蕨叶化石",
+    "nameEn": "Fern Fossil",
+    "rarity": "common",
+    "value": 45,
+    "shape": [
+      [
+        1
+      ],
+      [
+        1
+      ]
+    ],
+    "layerId": "dino_grave",
+    "color": "#9A9A9A"
+  },
+  {
+    "id": "amber_beetle",
+    "nameZh": "琥珀甲虫",
+    "nameEn": "Amber Beetle",
+    "rarity": "uncommon",
+    "value": 95,
+    "shape": [
+      [
+        1
+      ]
+    ],
+    "layerId": "dino_grave",
+    "color": "#3D9E5F"
+  },
+  {
+    "id": "small_claw",
+    "nameZh": "小型爪骨",
+    "nameEn": "Small Claw",
+    "rarity": "uncommon",
+    "value": 120,
+    "shape": [
+      [
+        1
+      ],
+      [
+        1
+      ]
+    ],
+    "layerId": "dino_grave",
+    "color": "#3D9E5F"
+  },
+  {
+    "id": "dino_egg",
+    "nameZh": "完整恐龙蛋",
+    "nameEn": "Dino Egg",
+    "rarity": "rare",
+    "value": 280,
+    "shape": [
+      [
+        1,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "layerId": "dino_grave",
+    "color": "#3B82C4"
+  },
+  {
+    "id": "saber_tooth",
+    "nameZh": "剑齿",
+    "nameEn": "Saber Tooth",
+    "rarity": "rare",
+    "value": 310,
+    "shape": [
+      [
+        1
+      ]
+    ],
+    "layerId": "dino_grave",
+    "color": "#3B82C4"
+  },
+  {
+    "id": "glowing_amber",
+    "nameZh": "发光琥珀",
+    "nameEn": "Glowing Amber",
+    "rarity": "epic",
+    "value": 520,
+    "shape": [
+      [
+        1
+      ]
+    ],
+    "layerId": "dino_grave",
+    "color": "#8B5CF6"
+  },
+  {
+    "id": "giant_rib",
+    "nameZh": "巨兽肋骨",
+    "nameEn": "Giant Rib",
+    "rarity": "epic",
+    "value": 680,
+    "shape": [
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "layerId": "dino_grave",
+    "color": "#8B5CF6"
+  },
+  {
+    "id": "mini_skeleton",
+    "nameZh": "完整小龙骨架",
+    "nameEn": "Mini Skeleton",
+    "rarity": "legendary",
+    "value": 1600,
+    "shape": [
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "layerId": "dino_grave",
+    "color": "#E8B84A"
+  },
+  {
+    "id": "dino_member_card",
+    "nameZh": "恐龙会员卡",
+    "nameEn": "Dino Member Card",
+    "rarity": "absurd",
+    "value": 600,
+    "shape": [
+      [
+        1
+      ]
+    ],
+    "layerId": "dino_grave",
+    "color": "#E07A2F"
+  },
+  {
+    "id": "salt_crystal",
+    "nameZh": "盐晶",
+    "nameEn": "Salt Crystal",
+    "rarity": "common",
+    "value": 55,
+    "shape": [
+      [
+        1
+      ]
+    ],
+    "layerId": "undersea",
+    "color": "#9A9A9A"
+  },
+  {
+    "id": "algae_bottle",
+    "nameZh": "发光海藻瓶",
+    "nameEn": "Algae Bottle",
+    "rarity": "common",
+    "value": 70,
+    "shape": [
+      [
+        1
+      ],
+      [
+        1
+      ]
+    ],
+    "layerId": "undersea",
+    "color": "#9A9A9A"
+  },
+  {
+    "id": "wreck_silver",
+    "nameZh": "沉船银币",
+    "nameEn": "Wreck Silver",
+    "rarity": "uncommon",
+    "value": 140,
+    "shape": [
+      [
+        1
+      ]
+    ],
+    "layerId": "undersea",
+    "color": "#3D9E5F"
+  },
+  {
+    "id": "black_pearl",
+    "nameZh": "黑珍珠",
+    "nameEn": "Black Pearl",
+    "rarity": "rare",
+    "value": 350,
+    "shape": [
+      [
+        1
+      ]
+    ],
+    "layerId": "undersea",
+    "color": "#3B82C4"
+  },
+  {
+    "id": "captain_compass",
+    "nameZh": "船长罗盘",
+    "nameEn": "Captain Compass",
+    "rarity": "rare",
+    "value": 430,
+    "shape": [
+      [
+        1
+      ],
+      [
+        1
+      ]
+    ],
+    "layerId": "undersea",
+    "color": "#3B82C4"
+  },
+  {
+    "id": "deep_phonograph",
+    "nameZh": "深海留声机",
+    "nameEn": "Deep Phonograph",
+    "rarity": "epic",
+    "value": 780,
+    "shape": [
+      [
+        1
+      ],
+      [
+        1
+      ],
+      [
+        1
+      ]
+    ],
+    "layerId": "undersea",
+    "color": "#8B5CF6"
+  },
+  {
+    "id": "giant_scale",
+    "nameZh": "巨型鱼鳞",
+    "nameEn": "Giant Scale",
+    "rarity": "epic",
+    "value": 900,
+    "shape": [
+      [
+        1
+      ],
+      [
+        1
+      ]
+    ],
+    "layerId": "undersea",
+    "color": "#8B5CF6"
+  },
+  {
+    "id": "gold_cup",
+    "nameZh": "沉船金杯",
+    "nameEn": "Gold Cup",
+    "rarity": "epic",
+    "value": 1050,
+    "shape": [
+      [
+        1
+      ],
+      [
+        1
+      ]
+    ],
+    "layerId": "undersea",
+    "color": "#8B5CF6"
+  },
+  {
+    "id": "abyss_eye",
+    "nameZh": "深渊之眼",
+    "nameEn": "Abyss Eye",
+    "rarity": "legendary",
+    "value": 2100,
+    "shape": [
+      [
+        1
+      ]
+    ],
+    "layerId": "undersea",
+    "color": "#E8B84A"
+  },
+  {
+    "id": "waterproof_toaster",
+    "nameZh": "防水烤面包机",
+    "nameEn": "Waterproof Toaster",
+    "rarity": "absurd",
+    "value": 880,
+    "shape": [
+      [
+        1,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "layerId": "undersea",
+    "color": "#E07A2F"
+  },
+  {
+    "id": "obsidian_shard",
+    "nameZh": "黑曜石片",
+    "nameEn": "Obsidian Shard",
+    "rarity": "common",
+    "value": 90,
+    "shape": [
+      [
+        1
+      ]
+    ],
+    "layerId": "core",
+    "color": "#9A9A9A"
+  },
+  {
+    "id": "energy_gem",
+    "nameZh": "能量晶体",
+    "nameEn": "Energy Gem",
+    "rarity": "uncommon",
+    "value": 220,
+    "shape": [
+      [
+        1
+      ]
+    ],
+    "layerId": "core",
+    "color": "#3D9E5F"
+  },
+  {
+    "id": "core_gear",
+    "nameZh": "地心齿轮",
+    "nameEn": "Core Gear",
+    "rarity": "uncommon",
+    "value": 280,
+    "shape": [
+      [
+        1
+      ],
+      [
+        1
+      ]
+    ],
+    "layerId": "core",
+    "color": "#3D9E5F"
+  },
+  {
+    "id": "lava_glass_flower",
+    "nameZh": "熔岩玻璃花",
+    "nameEn": "Lava Glass Flower",
+    "rarity": "rare",
+    "value": 620,
+    "shape": [
+      [
+        1
+      ],
+      [
+        1
+      ]
+    ],
+    "layerId": "core",
+    "color": "#3B82C4"
+  },
+  {
+    "id": "antigrav_screw",
+    "nameZh": "反重力螺丝",
+    "nameEn": "Anti-Grav Screw",
+    "rarity": "rare",
+    "value": 750,
+    "shape": [
+      [
+        1
+      ]
+    ],
+    "layerId": "core",
+    "color": "#3B82C4"
+  },
+  {
+    "id": "machine_heart",
+    "nameZh": "远古机器心脏",
+    "nameEn": "Machine Heart",
+    "rarity": "epic",
+    "value": 1400,
+    "shape": [
+      [
+        1,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "layerId": "core",
+    "color": "#8B5CF6"
+  },
+  {
+    "id": "tiny_sun",
+    "nameZh": "缩小的地下太阳",
+    "nameEn": "Tiny Sun",
+    "rarity": "epic",
+    "value": 1800,
+    "shape": [
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "layerId": "core",
+    "color": "#8B5CF6"
+  },
+  {
+    "id": "core_pass",
+    "nameZh": "地心通行证",
+    "nameEn": "Core Pass",
+    "rarity": "legendary",
+    "value": 2600,
+    "shape": [
+      [
+        1
+      ]
+    ],
+    "layerId": "core",
+    "color": "#E8B84A"
+  },
+  {
+    "id": "world_core_shard",
+    "nameZh": "世界核心碎片",
+    "nameEn": "World Core Shard",
+    "rarity": "legendary",
+    "value": 4500,
+    "shape": [
+      [
+        1
+      ],
+      [
+        1
+      ],
+      [
+        1
+      ]
+    ],
+    "layerId": "core",
+    "color": "#E8B84A"
+  },
+  {
+    "id": "god_soup_bowl",
+    "nameZh": "神明遗失的汤碗",
+    "nameEn": "God's Soup Bowl",
+    "rarity": "absurd",
+    "value": 3200,
+    "shape": [
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "layerId": "core",
+    "color": "#E07A2F"
   }
 ]

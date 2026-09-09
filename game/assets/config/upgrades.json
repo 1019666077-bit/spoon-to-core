@@ -1,0 +1,77 @@
+{
+  "stamina": [
+    {
+      "level": 0,
+      "max": 60,
+      "price": 0
+    },
+    {
+      "level": 1,
+      "max": 80,
+      "price": 120
+    },
+    {
+      "level": 2,
+      "max": 105,
+      "price": 400
+    },
+    {
+      "level": 3,
+      "max": 135,
+      "price": 1100
+    },
+    {
+      "level": 4,
+      "max": 170,
+      "price": 3200
+    },
+    {
+      "level": 5,
+      "max": 210,
+      "price": 9000
+    },
+    {
+      "level": 6,
+      "max": 260,
+      "price": 25000
+    }
+  ],
+  "backpack": [
+    {
+      "level": 0,
+      "cols": 3,
+      "rows": 4,
+      "price": 0
+    },
+    {
+      "level": 1,
+      "cols": 4,
+      "rows": 4,
+      "price": 200
+    },
+    {
+      "level": 2,
+      "cols": 4,
+      "rows": 5,
+      "price": 700
+    },
+    {
+      "level": 3,
+      "cols": 5,
+      "rows": 5,
+      "price": 2000
+    },
+    {
+      "level": 4,
+      "cols": 5,
+      "rows": 6,
+      "price": 6000
+    },
+    {
+      "level": 5,
+      "cols": 6,
+      "rows": 6,
+      "price": 18000
+    }
+  ]
+}

@@ -18,17 +18,20 @@ const fileBundle = {
   treasures: readJson("treasures.json"),
   tools: readJson("tools.json"),
   layers: readJson("layers.json"),
+  upgrades: readJson("upgrades.json"),
+  consumables: readJson("consumables.json"),
+  rules: readJson("rules.json"),
 };
 
 describe("config validation", () => {
-  it("accepts the stage 0 JSON files", () => {
+  it("accepts the greybox JSON files", () => {
     const result = validateConfigs(fileBundle);
     assert.equal(result.ok, true);
     if (result.ok) {
-      assert.equal(result.configs.blocks.length, 4);
-      assert.equal(result.configs.treasures.length, 5);
-      assert.equal(result.configs.tools.length, 2);
-      assert.equal(result.configs.layers.length, 1);
+      assert.equal(result.configs.blocks.length, CONFIG_BUNDLE.blocks.length);
+      assert.equal(result.configs.treasures.length, CONFIG_BUNDLE.treasures.length);
+      assert.equal(result.configs.tools.length, CONFIG_BUNDLE.tools.length);
+      assert.equal(result.configs.layers.length, 5);
     }
   });
 
@@ -55,7 +58,7 @@ describe("config validation", () => {
 
   it("rejects unknown block references on a layer", () => {
     const raw = structuredClone(fileBundle) as typeof CONFIG_BUNDLE;
-    raw.layers[0] = { ...raw.layers[0]!, blockIds: ["not_a_block"] };
+    raw.layers[0] = { ...raw.layers[0]!, blockIds: ["not_a_block"], blockWeights: { not_a_block: 1 } };
     const result = validateConfigs(raw);
     assert.equal(result.ok, false);
     if (!result.ok) {

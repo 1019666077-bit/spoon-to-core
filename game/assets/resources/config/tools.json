@@ -14,5 +14,45 @@
     "power": 2,
     "attackInterval": 0.3,
     "price": 150
+  },
+  {
+    "id": "twin_spoon",
+    "nameZh": "双头工程勺",
+    "nameEn": "Twin Engineer Spoon",
+    "power": 3,
+    "attackInterval": 0.27,
+    "price": 500
+  },
+  {
+    "id": "vibro_spoon",
+    "nameZh": "震动破岩勺",
+    "nameEn": "Vibro Rock Spoon",
+    "power": 5,
+    "attackInterval": 0.24,
+    "price": 1400
+  },
+  {
+    "id": "turbo_spoon",
+    "nameZh": "涡轮钻头勺",
+    "nameEn": "Turbo Drill Spoon",
+    "power": 8,
+    "attackInterval": 0.2,
+    "price": 4200
+  },
+  {
+    "id": "plasma_spoon",
+    "nameZh": "等离子地心勺",
+    "nameEn": "Plasma Core Spoon",
+    "power": 13,
+    "attackInterval": 0.16,
+    "price": 12000
+  },
+  {
+    "id": "antimatter_spoon",
+    "nameZh": "反物质汤勺",
+    "nameEn": "Antimatter Ladle",
+    "power": 21,
+    "attackInterval": 0.12,
+    "price": 36000
   }
 ]

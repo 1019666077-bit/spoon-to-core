@@ -12,7 +12,7 @@ import {
 import { CONFIG_BUNDLE } from "../data/configs";
 import { createPlatform } from "../platform/createPlatform";
 import { ThemeConfig } from "../ui/ThemeConfig";
-import { TitleView } from "../ui/TitleView";
+import { GameView } from "../ui/GameView";
 import { bootGame } from "./bootGame";
 import {
   CAMERA_NAME,
@@ -40,8 +40,8 @@ export class GameBootstrap extends Component {
 
     const platform = createPlatform();
     const { app } = await bootGame({ platform, configs: CONFIG_BUNDLE });
-    const title = titleHost.getComponent(TitleView) ?? titleHost.addComponent(TitleView);
-    title.bind(app);
+    const gameView = titleHost.getComponent(GameView) ?? titleHost.addComponent(GameView);
+    gameView.bind(app);
   }
 
   /** Canvas is the unique UI root. GameBootstrap lives on it in boot.scene. */
