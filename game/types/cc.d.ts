@@ -7,6 +7,8 @@ declare module "cc" {
   export class Node {
     name: string;
     active: boolean;
+    parent: Node | null;
+    layer: number;
     constructor(name?: string);
     addChild(node: Node): void;
     getChildByName(name: string): Node | null;
@@ -70,12 +72,20 @@ declare module "cc" {
     on(type: string, callback: (...args: unknown[]) => void, target?: unknown): void;
   }
 
-  export class Canvas extends Component {}
+  export class Canvas extends Component {
+    cameraComponent: Camera | null;
+    alignCanvasWithScreen: boolean;
+  }
 
   export class Camera extends Component {
     priority: number;
     clearColor: Color;
     orthoHeight: number;
+    projection: number;
+    visibility: number;
+    clearFlags: number;
+    near: number;
+    far: number;
   }
 
   export const view: {
