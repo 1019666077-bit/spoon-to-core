@@ -1,0 +1,13 @@
+{
+  "name": "spoon-to-core",
+  "uuid": "7c2e4a91-6b0f-4d3a-9e18-2f5c8b1d4a70",
+  "version": "3.8.8",
+  "creator": {
+    "version": "3.8.8"
+  },
+  "description": "Spoon to the Core / 一勺到底",
+  "type": "module",
+  "scripts": {
+    "test": "tsx --test tests/*.test.ts"
+  }
+}

@@ -10,6 +10,31 @@
 
 ---
 
+## 源码位置（阶段 0）
+
+正式工程在 [`game/`](game/)。用 **Cocos Creator 3.8.8** 打开该目录，场景为 `assets/scenes/boot.scene`。
+
+```text
+game/
+  assets/scripts/     domain / data / save / platform / ui / bootstrap
+  assets/config/      4 方块、5 宝物、2 工具、1 地层
+  assets/scenes/      boot.scene
+  tests/              Node 单测，不依赖编辑器
+```
+
+不依赖 Creator 时，在仓库根或 `game/` 下（Node 22+）：
+
+```text
+cd game
+npx tsx --test tests/*.test.ts
+```
+
+Grok Build 里的网页预览只是同一套 domain 的宿主，**不是**正式运行层。正式版本仍是这个 Cocos 工程。
+
+阶段 0 已完成：标题页、状态机、seed 随机数、配置校验、`schemaVersion: 1` 存档。Creator 实机 Web 包仍需在本地编辑器里打一次。
+
+---
+
 ## 给 AI 开发助手的第一条指令
 
 如果你是被要求“照这个仓库做”的 AI，请严格按下面顺序执行，不要跳步。
@@ -60,6 +85,7 @@
 | [`01_GDD.md`](01_GDD.md) | 完整策划案：玩法、数值、五地层、50 件宝物、全部页面与按钮、引导、广告、埋点、测试 |
 | [`02_BUILD_STAGES.md`](02_BUILD_STAGES.md) | 阶段 0—9 开发提示词、验收标准、常见偏差纠正 |
 | [`03_ART_AUDIO.md`](03_ART_AUDIO.md) | 美术规格、动画帧数、命名规范、音乐音效清单、生成提示词、商用检查、商店素材 |
+| [`game/`](game/) | Cocos Creator 3.8.8 工程（阶段 0 骨架） |
 
 ---
 
@@ -80,7 +106,7 @@
 - [x] 完整策划案
 - [x] 分阶段开发执行书
 - [x] 美术与音频执行书
-- [ ] 阶段 0：工程骨架
+- [x] 阶段 0：工程骨架（Creator 实机 Web 包待本地验证）
 - [ ] 阶段 1：挖掘灰盒
 - [ ] 阶段 2：局内循环（体力、掉落、背包、返程）
 - [ ] 阶段 3：永久成长（结算、升级、存档）

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "rusty_coin",
+    "nameZh": "生锈硬币",
+    "nameEn": "Rusty Coin",
+    "rarity": "common",
+    "value": 8,
+    "shape": [[1]]
+  },
+  {
+    "id": "dead_phone",
+    "nameZh": "没电的旧手机",
+    "nameEn": "Dead Phone",
+    "rarity": "common",
+    "value": 15,
+    "shape": [[1], [1]]
+  },
+  {
+    "id": "neighbor_key",
+    "nameZh": "邻居家的钥匙",
+    "nameEn": "Neighbor's Key",
+    "rarity": "uncommon",
+    "value": 30,
+    "shape": [[1]]
+  },
+  {
+    "id": "mud_soda",
+    "nameZh": "泥封汽水瓶",
+    "nameEn": "Muddy Soda Bottle",
+    "rarity": "uncommon",
+    "value": 42,
+    "shape": [[1], [1]]
+  },
+  {
+    "id": "old_cartridge",
+    "nameZh": "老式游戏卡带",
+    "nameEn": "Old Game Cartridge",
+    "rarity": "uncommon",
+    "value": 55,
+    "shape": [[1]]
+  }
+]

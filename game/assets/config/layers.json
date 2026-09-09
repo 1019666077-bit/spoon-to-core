@@ -1,0 +1,15 @@
+[
+  {
+    "id": "backyard",
+    "nameZh": "后院与城市地下",
+    "nameEn": "Backyard & City Underground",
+    "depthMin": 0,
+    "depthMax": 50,
+    "blockIds": [
+      "loose_soil",
+      "clay",
+      "rubble",
+      "hard_rock"
+    ]
+  }
+]

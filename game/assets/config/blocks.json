@@ -1,0 +1,30 @@
+[
+  {
+    "id": "loose_soil",
+    "nameZh": "松土",
+    "nameEn": "Loose Soil",
+    "hp": 1,
+    "color": "#C4A574"
+  },
+  {
+    "id": "clay",
+    "nameZh": "黏土",
+    "nameEn": "Clay",
+    "hp": 2,
+    "color": "#8B5A2B"
+  },
+  {
+    "id": "rubble",
+    "nameZh": "碎石",
+    "nameEn": "Rubble",
+    "hp": 4,
+    "color": "#7A7A72"
+  },
+  {
+    "id": "hard_rock",
+    "nameZh": "硬岩",
+    "nameEn": "Hard Rock",
+    "hp": 7,
+    "color": "#4A4F57"
+  }
+]
