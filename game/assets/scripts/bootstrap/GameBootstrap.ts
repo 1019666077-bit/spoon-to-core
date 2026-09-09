@@ -6,7 +6,6 @@ import {
   Component,
   Node,
   UITransform,
-  Widget,
   view,
   ResolutionPolicy,
 } from "cc";
@@ -15,6 +14,14 @@ import { createPlatform } from "../platform/createPlatform";
 import { ThemeConfig } from "../ui/ThemeConfig";
 import { TitleView } from "../ui/TitleView";
 import { bootGame } from "./bootGame";
+import {
+  CAMERA_NAME,
+  CANVAS_NAME,
+  ORTHO_PROJECTION,
+  TITLE_HOST_NAME,
+  UI_2D_LAYER,
+  UI_CAMERA_VISIBILITY,
+} from "./StageZeroLayout";
 
 const { ccclass } = _decorator;
 
@@ -26,46 +33,52 @@ export class GameBootstrap extends Component {
       ThemeConfig.designHeight,
       ResolutionPolicy.SHOW_ALL,
     );
-    this.ensureCanvas();
+
+    const canvas = this.requireCanvas();
+    this.configureUiCamera(canvas);
+    const titleHost = this.requireTitleHost(canvas);
+
     const platform = createPlatform();
     const { app } = await bootGame({ platform, configs: CONFIG_BUNDLE });
-    const viewNode = this.node.getChildByName("TitleHost") ?? this.node;
-    const title = viewNode.getComponent(TitleView) ?? viewNode.addComponent(TitleView);
+    const title = titleHost.getComponent(TitleView) ?? titleHost.addComponent(TitleView);
     title.bind(app);
   }
 
-  private ensureCanvas(): void {
-    let canvasNode = this.node.getChildByName("Canvas");
-    if (!canvasNode) {
-      canvasNode = new Node("Canvas");
-      this.node.addChild(canvasNode);
-    }
-    if (!canvasNode.getComponent(UITransform)) {
-      const transform = canvasNode.addComponent(UITransform);
-      transform.setContentSize(ThemeConfig.designWidth, ThemeConfig.designHeight);
-    }
-    if (!canvasNode.getComponent(Canvas)) {
-      canvasNode.addComponent(Canvas);
-    }
-    const widget = canvasNode.getComponent(Widget) ?? canvasNode.addComponent(Widget);
-    widget.isAlignTop = widget.isAlignBottom = widget.isAlignLeft = widget.isAlignRight = true;
-    widget.top = widget.bottom = widget.left = widget.right = 0;
-    widget.updateAlignment();
+  /** Canvas is the unique UI root. GameBootstrap lives on it in boot.scene. */
+  private requireCanvas(): Node {
+    if (this.node.getComponent(Canvas)) return this.node;
+    const child = this.node.getChildByName(CANVAS_NAME);
+    if (child?.getComponent(Canvas)) return child;
+    const parent = this.node.parent;
+    if (parent?.getComponent(Canvas)) return parent;
+    throw new Error("boot.scene must contain exactly one Canvas for GameBootstrap");
+  }
 
-    let cameraNode = canvasNode.getChildByName("Camera");
-    if (!cameraNode) {
-      cameraNode = new Node("Camera");
-      canvasNode.addChild(cameraNode);
+  private requireTitleHost(canvas: Node): Node {
+    let host = canvas.getChildByName(TITLE_HOST_NAME);
+    if (!host) {
+      host = new Node(TITLE_HOST_NAME);
+      host.layer = UI_2D_LAYER;
+      const transform = host.addComponent(UITransform);
+      transform.setContentSize(ThemeConfig.designWidth, ThemeConfig.designHeight);
+      canvas.addChild(host);
     }
-    const camera = cameraNode.getComponent(Camera) ?? cameraNode.addComponent(Camera);
+    return host;
+  }
+
+  private configureUiCamera(canvas: Node): void {
+    const cameraNode = canvas.getChildByName(CAMERA_NAME);
+    if (!cameraNode) {
+      throw new Error("boot.scene Canvas must contain a Camera child");
+    }
+    const camera = cameraNode.getComponent(Camera);
+    if (!camera) {
+      throw new Error("boot.scene Camera node must have a cc.Camera");
+    }
     camera.clearColor = new Color(22, 17, 12, 255);
     camera.priority = 0;
-
-    if (!canvasNode.getChildByName("TitleHost")) {
-      const host = new Node("TitleHost");
-      const hostTransform = host.addComponent(UITransform);
-      hostTransform.setContentSize(ThemeConfig.designWidth, ThemeConfig.designHeight);
-      canvasNode.addChild(host);
-    }
+    camera.projection = ORTHO_PROJECTION;
+    camera.visibility = UI_CAMERA_VISIBILITY;
+    camera.orthoHeight = ThemeConfig.designHeight / 2;
   }
 }

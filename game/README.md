@@ -8,15 +8,19 @@ The Grok web preview mounts the same `domain` / `save` / `platform` modules so t
 
 1. Install Cocos Creator 3.8.8.
 2. Dashboard → Open → this `game/` directory (`package.json` + `assets/` are the project flags).
-3. Open `assets/scenes/boot.scene`. Creator will generate missing `.meta` UUIDs on first import.
-4. Preview. `GameBootstrap` builds Canvas / title UI in code.
+3. Open `assets/scenes/boot.scene`.
+4. Preview. `GameBootstrap` is bound on Canvas (`770fbmX1JhNkYdCbu1Y8OQw`). Title, buttons and settings live under `Canvas/TitleHost`.
+
+`boot.scene` is based on the official Creator 3.8.8 `scene-2d.scene` template (`cocos-engine` tag `v3.8.8`), not a hand-invented serialization.
 
 ## Tests (no editor)
 
-From this folder (Node 22+, tsx):
+From this folder, on a fresh machine:
 
 ```text
-npx tsx --test tests/*.test.ts
+npm install
+npm test
+npm run typecheck
 ```
 
 ## Stage 0 scope

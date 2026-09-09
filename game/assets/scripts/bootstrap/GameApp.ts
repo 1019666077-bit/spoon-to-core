@@ -24,6 +24,8 @@ export class GameApp {
   rng: SeededRandom;
   settingsOpen = false;
 
+  /** Seed supplied at boot. When set, startDigging reuses it instead of rolling a new one. */
+  readonly injectedSeed: number | undefined;
   private readonly listeners = new Set<() => void>();
 
   constructor(deps: GameAppDeps) {
@@ -32,6 +34,7 @@ export class GameApp {
     this.save = deps.save;
     this.saves = deps.saves;
     this.analytics = new AnalyticsStub(deps.platform);
+    this.injectedSeed = deps.seed;
     this.rng = new SeededRandom(deps.seed ?? randomSeed());
   }
 
@@ -45,8 +48,14 @@ export class GameApp {
     this.platform.gameplayStop();
   }
 
-  startDigging(): void {
-    this.rng = new SeededRandom(randomSeed());
+  /**
+   * Starts an empty digging session.
+   * Seed order: explicit argument → boot-injected seed → fresh random seed.
+   * Never silently discards a seed the test (or boot) already chose.
+   */
+  startDigging(seed?: number): void {
+    const runSeed = seed ?? this.injectedSeed ?? randomSeed();
+    this.rng = new SeededRandom(runSeed);
     this.transition(GameStates.Digging);
     this.platform.gameplayStart();
     this.analytics.report("run_start", { seed: this.rng.seed });
