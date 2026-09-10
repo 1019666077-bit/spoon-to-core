@@ -1,0 +1,182 @@
+[
+  {
+    "id": "damp_clod",
+    "nameZh": "潮泥团",
+    "nameEn": "Damp Clod",
+    "kind": "mud",
+    "sellValue": 1,
+    "weight": 24,
+    "layerId": "backyard"
+  },
+  {
+    "id": "packed_loam",
+    "nameZh": "夯黄土",
+    "nameEn": "Packed Loam",
+    "kind": "mud",
+    "sellValue": 2,
+    "weight": 16,
+    "layerId": "backyard"
+  },
+  {
+    "id": "clay_ribbon",
+    "nameZh": "黏土条",
+    "nameEn": "Clay Ribbon",
+    "kind": "mud",
+    "sellValue": 2,
+    "weight": 12,
+    "layerId": ""
+  },
+  {
+    "id": "kiln_slag",
+    "nameZh": "窑渣",
+    "nameEn": "Kiln Slag",
+    "kind": "mud",
+    "sellValue": 3,
+    "weight": 10,
+    "layerId": "lost_city"
+  },
+  {
+    "id": "grit_flake",
+    "nameZh": "砂金屑",
+    "nameEn": "Grit Flake",
+    "kind": "gold",
+    "sellValue": 5,
+    "weight": 10,
+    "layerId": "backyard"
+  },
+  {
+    "id": "copper_bit",
+    "nameZh": "铜末",
+    "nameEn": "Copper Bit",
+    "kind": "gold",
+    "sellValue": 4,
+    "weight": 8,
+    "layerId": ""
+  },
+  {
+    "id": "brass_tack",
+    "nameZh": "铜钉",
+    "nameEn": "Brass Tack",
+    "kind": "gold",
+    "sellValue": 7,
+    "weight": 6,
+    "layerId": "lost_city"
+  },
+  {
+    "id": "chipped_tile",
+    "nameZh": "碎瓷片",
+    "nameEn": "Chipped Tile",
+    "kind": "oddment",
+    "sellValue": 6,
+    "weight": 8,
+    "layerId": "backyard"
+  },
+  {
+    "id": "bottle_neck",
+    "nameZh": "瓶口残环",
+    "nameEn": "Bottle Neck",
+    "kind": "oddment",
+    "sellValue": 7,
+    "weight": 6,
+    "layerId": "backyard"
+  },
+  {
+    "id": "rust_washer",
+    "nameZh": "锈垫圈",
+    "nameEn": "Rust Washer",
+    "kind": "oddment",
+    "sellValue": 5,
+    "weight": 7,
+    "layerId": ""
+  },
+  {
+    "id": "seed_hull",
+    "nameZh": "种壳",
+    "nameEn": "Seed Hull",
+    "kind": "oddment",
+    "sellValue": 3,
+    "weight": 8,
+    "layerId": "backyard"
+  },
+  {
+    "id": "glass_bead",
+    "nameZh": "玻璃珠",
+    "nameEn": "Glass Bead",
+    "kind": "oddment",
+    "sellValue": 8,
+    "weight": 5,
+    "layerId": ""
+  },
+  {
+    "id": "charcoal_nub",
+    "nameZh": "炭粒",
+    "nameEn": "Charcoal Nub",
+    "kind": "oddment",
+    "sellValue": 4,
+    "weight": 6,
+    "layerId": ""
+  },
+  {
+    "id": "bone_splinter",
+    "nameZh": "骨刺屑",
+    "nameEn": "Bone Splinter",
+    "kind": "oddment",
+    "sellValue": 6,
+    "weight": 5,
+    "layerId": "dino_grave"
+  },
+  {
+    "id": "mica_chip",
+    "nameZh": "云母片",
+    "nameEn": "Mica Chip",
+    "kind": "oddment",
+    "sellValue": 9,
+    "weight": 4,
+    "layerId": "lost_city"
+  },
+  {
+    "id": "river_pebble",
+    "nameZh": "河光石",
+    "nameEn": "River Pebble",
+    "kind": "oddment",
+    "sellValue": 5,
+    "weight": 7,
+    "layerId": "undersea"
+  },
+  {
+    "id": "wax_crumb",
+    "nameZh": "蜡屑",
+    "nameEn": "Wax Crumb",
+    "kind": "oddment",
+    "sellValue": 4,
+    "weight": 5,
+    "layerId": ""
+  },
+  {
+    "id": "silk_thread",
+    "nameZh": "土丝",
+    "nameEn": "Soil Silk",
+    "kind": "oddment",
+    "sellValue": 6,
+    "weight": 4,
+    "layerId": ""
+  },
+  {
+    "id": "rim_chip",
+    "nameZh": "碗沿残片",
+    "nameEn": "Rim Chip",
+    "kind": "relic_chip",
+    "sellValue": 0,
+    "weight": 3,
+    "layerId": ""
+  },
+  {
+    "id": "gate_splinter",
+    "nameZh": "层闸木刺",
+    "nameEn": "Gate Splinter",
+    "kind": "relic_chip",
+    "sellValue": 0,
+    "weight": 2,
+    "layerId": ""
+  }
+]

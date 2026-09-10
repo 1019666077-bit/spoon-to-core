@@ -23,6 +23,7 @@ const fileBundle = {
   rules: readJson("rules.json"),
   workers: readJson("workers.json"),
   skillNodes: readJson("skill_nodes.json"),
+  loot: readJson("loot.json"),
 };
 
 describe("config validation", () => {
@@ -36,6 +37,7 @@ describe("config validation", () => {
       assert.equal(result.configs.layers.length, 5);
       assert.ok(result.configs.workers.length >= 3);
       assert.ok(result.configs.skillNodes.length >= 40);
+      assert.ok(result.configs.loot.length >= 15);
       assert.equal(result.configs.tools[0]?.form, "bowl");
       assert.equal(result.configs.tools[0]?.id, "chipped_bowl");
     }

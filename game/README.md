@@ -2,7 +2,7 @@
 
 This folder is the **official game**. Open it with **Cocos Creator 3.8.8**.
 
-Stage **0′** is the click-dirt empire shell: Home hub, a clickable dirt patch, starting **bowl**, worker / skill-tree placeholders, and `layer_choice`. The old grid-dig session is still in the repo for tests, but `GameView` does not use it as the main UI.
+Stage **1′** is the first playable empire loop: click / hold the dirt patch, bowl → shovel, the Fangspore Diggerling ticks, the skill tree spends points, layer-end descend is real, and 过热铲 is the first breakthrough. The old grid-dig session stays for leftover tests; `GameView` does not use it as the main UI.
 
 ## Open
 
@@ -29,11 +29,14 @@ Dump `CONFIG_BUNDLE` into `assets/config` + `assets/resources/config`:
 npm run sync-config
 ```
 
-## Greybox (stage 0′)
+## Greybox (stage 1′)
 
-- Home: gold, depth, 开始挖土, three crew berths, 根系图谱, 帝国账册.
-- Dig: click the dirt color block; HUD shows 开裂饭碗 · 碗.
-- Layer gate shell: 继续搜刮 / 下潜 / 回 Home.
-- Save `schemaVersion: 3` with roster, skill nodes, tool form, scrape progress.
+- Home: gold, depth, 开始挖土, 灶间铺, hireable crew berths, 根系图谱, 帝国账册.
+- Dig: click or hold the dirt patch; drops mud / gold / oddments; HUD shows the current tool form.
+- First shovel buy (灶间铲 / 工地铁铲) changes power and interval.
+- 牙孢子伴掘虫 ticks dirt and gold; Stats shows period output and 工作/怠工.
+- Layer gate: 继续搜刮 / 下潜 (next layer hardness + loot) / 回 Home.
+- 过热铲: short dig surge + cooldown after a shovel or the first rift node.
+- Save `schemaVersion: 4` with skill points, relics / shards, crew period, breakthrough CD.
 
-Version: `0.6.0-empire0`.
+Version: `0.7.0-empire1`.

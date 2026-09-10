@@ -8,18 +8,23 @@ import {
   type BlockConfig,
   type ConsumableConfig,
   type GameConfigs,
+  LOOT_KINDS,
   type LayerConfig,
   type LayerPlayMode,
+  type LootConfig,
+  type LootKind,
   type Rarity,
   type RulesConfig,
   type SkillBranchId,
   type SkillNodeConfig,
+  type SkillNodeEffect,
   type StaminaUpgradeTier,
   type ToolConfig,
   type ToolForm,
   type TreasureConfig,
   type WorkerConfig,
 } from "./types";
+
 
 export type ConfigError = {
   path: string;
@@ -379,7 +384,65 @@ function parseSkillNode(raw: unknown, path: string, errors: ConfigError[]): Skil
       });
     }
   }
-  return { id, nameZh, nameEn, branch: branch as SkillBranchId, requires, tier };
+  const cost = asFiniteNumber(raw.cost) ?? 1;
+  if (cost < 1) errors.push({ path: `${path}.cost`, message: "cost must be >= 1" });
+  const effects = parseSkillEffects(raw.effects, `${path}.effects`, errors);
+  return { id, nameZh, nameEn, branch: branch as SkillBranchId, requires, tier, cost, effects };
+}
+
+function parseSkillEffects(raw: unknown, path: string, errors: ConfigError[]): SkillNodeEffect {
+  if (raw === undefined || raw === null) return {};
+  if (!isRecord(raw)) {
+    errors.push({ path, message: "effects must be an object" });
+    return {};
+  }
+  const effects: SkillNodeEffect = {};
+  if (raw.digPower !== undefined) {
+    const n = asFiniteNumber(raw.digPower);
+    if (n === null) errors.push({ path: `${path}.digPower`, message: "must be a number" });
+    else effects.digPower = n;
+  }
+  if (raw.workerMul !== undefined) {
+    const n = asFiniteNumber(raw.workerMul);
+    if (n === null) errors.push({ path: `${path}.workerMul`, message: "must be a number" });
+    else effects.workerMul = n;
+  }
+  if (raw.unlockBreakthrough !== undefined) {
+    if (typeof raw.unlockBreakthrough !== "boolean") {
+      errors.push({ path: `${path}.unlockBreakthrough`, message: "must be a boolean" });
+    } else {
+      effects.unlockBreakthrough = raw.unlockBreakthrough;
+    }
+  }
+  return effects;
+}
+
+function parseLoot(raw: unknown, path: string, errors: ConfigError[], layerIds: Set<string>): LootConfig | null {
+  if (!isRecord(raw)) {
+    errors.push({ path, message: "expected object" });
+    return null;
+  }
+  const id = asString(raw.id);
+  const nameZh = asString(raw.nameZh);
+  const nameEn = asString(raw.nameEn);
+  const kind = asString(raw.kind);
+  const sellValue = asFiniteNumber(raw.sellValue);
+  const weight = asFiniteNumber(raw.weight);
+  const layerId = asString(raw.layerId) ?? "";
+  if (!id || !nameZh || !nameEn || !kind || sellValue === null || weight === null) {
+    errors.push({ path, message: "missing id, names, kind, sellValue, or weight" });
+    return null;
+  }
+  checkId(id, `${path}.id`, errors);
+  if (!(LOOT_KINDS as readonly string[]).includes(kind)) {
+    errors.push({ path: `${path}.kind`, message: `unknown loot kind "${kind}"` });
+  }
+  if (sellValue < 0) errors.push({ path: `${path}.sellValue`, message: "sellValue must be >= 0" });
+  if (weight < 0) errors.push({ path: `${path}.weight`, message: "weight must be >= 0" });
+  if (layerId && !layerIds.has(layerId)) {
+    errors.push({ path: `${path}.layerId`, message: `unknown layer "${layerId}"` });
+  }
+  return { id, nameZh, nameEn, kind: kind as LootKind, sellValue, weight, layerId };
 }
 
 function parseStaminaTier(raw: unknown, path: string, errors: ConfigError[]): StaminaUpgradeTier | null {
@@ -640,6 +703,21 @@ export function validateConfigs(raw: unknown): ConfigValidationResult {
     });
   }
 
+  const loot: LootConfig[] = [];
+  const lootIds = new Set<string>();
+  if (!Array.isArray(raw.loot) || raw.loot.length < 15) {
+    errors.push({ path: "loot", message: "need at least 15 sellable loot configs" });
+  }
+  if (Array.isArray(raw.loot)) {
+    raw.loot.forEach((item, i) => {
+      const parsed = parseLoot(item, `loot[${i}]`, errors, layerIds);
+      if (parsed) {
+        pushUnique(lootIds, parsed.id, `loot[${i}].id`, errors);
+        loot.push(parsed);
+      }
+    });
+  }
+
   if (errors.length > 0) return { ok: false, configs: null, errors };
   return {
     ok: true,
@@ -653,6 +731,7 @@ export function validateConfigs(raw: unknown): ConfigValidationResult {
       rules,
       workers,
       skillNodes,
+      loot,
     },
     errors: [],
   };

@@ -4,8 +4,8 @@
     "nameZh": "牙孢子伴掘虫",
     "nameEn": "Fangspore Diggerling",
     "slot": 0,
-    "hirePrice": 80,
-    "digRate": 0.15,
+    "hirePrice": 50,
+    "digRate": 0.8,
     "blurbZh": "贴着碗沿啃松土的小型伴掘虫。",
     "blurbEn": "A small diggerling that gnaws loose soil along the bowl rim."
   },

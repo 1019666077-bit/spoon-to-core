@@ -5,7 +5,11 @@
     "nameEn": "Rim Hold",
     "branch": "vessel",
     "requires": [],
-    "tier": 0
+    "tier": 0,
+    "cost": 1,
+    "effects": {
+      "digPower": 1
+    }
   },
   {
     "id": "ves_clay_temper",
@@ -15,7 +19,11 @@
     "requires": [
       "ves_rim_hold"
     ],
-    "tier": 1
+    "tier": 1,
+    "cost": 1,
+    "effects": {
+      "digPower": 1
+    }
   },
   {
     "id": "ves_haft_bind",
@@ -25,7 +33,9 @@
     "requires": [
       "ves_clay_temper"
     ],
-    "tier": 2
+    "tier": 2,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "ves_blade_flare",
@@ -35,7 +45,9 @@
     "requires": [
       "ves_haft_bind"
     ],
-    "tier": 3
+    "tier": 3,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "ves_twin_ridge",
@@ -45,7 +57,9 @@
     "requires": [
       "ves_blade_flare"
     ],
-    "tier": 4
+    "tier": 4,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "ves_pulse_keel",
@@ -55,7 +69,9 @@
     "requires": [
       "ves_twin_ridge"
     ],
-    "tier": 5
+    "tier": 5,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "ves_spiral_bit",
@@ -65,7 +81,9 @@
     "requires": [
       "ves_pulse_keel"
     ],
-    "tier": 6
+    "tier": 6,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "ves_ion_groove",
@@ -75,7 +93,9 @@
     "requires": [
       "ves_spiral_bit"
     ],
-    "tier": 7
+    "tier": 7,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "ves_void_lip",
@@ -85,7 +105,9 @@
     "requires": [
       "ves_ion_groove"
     ],
-    "tier": 8
+    "tier": 8,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "ves_form_oath",
@@ -95,7 +117,9 @@
     "requires": [
       "ves_void_lip"
     ],
-    "tier": 9
+    "tier": 9,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "crw_first_berth",
@@ -103,7 +127,11 @@
     "nameEn": "First Berth",
     "branch": "crew",
     "requires": [],
-    "tier": 0
+    "tier": 0,
+    "cost": 1,
+    "effects": {
+      "workerMul": 0.5
+    }
   },
   {
     "id": "crw_spore_hatch",
@@ -113,7 +141,11 @@
     "requires": [
       "crw_first_berth"
     ],
-    "tier": 1
+    "tier": 1,
+    "cost": 1,
+    "effects": {
+      "workerMul": 0.5
+    }
   },
   {
     "id": "crw_ram_kiln",
@@ -123,7 +155,9 @@
     "requires": [
       "crw_spore_hatch"
     ],
-    "tier": 2
+    "tier": 2,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "crw_root_chant",
@@ -133,7 +167,9 @@
     "requires": [
       "crw_ram_kiln"
     ],
-    "tier": 3
+    "tier": 3,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "crw_second_berth",
@@ -143,7 +179,9 @@
     "requires": [
       "crw_spore_hatch"
     ],
-    "tier": 2
+    "tier": 2,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "crw_third_berth",
@@ -153,7 +191,9 @@
     "requires": [
       "crw_second_berth"
     ],
-    "tier": 3
+    "tier": 3,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "crw_feed_trough",
@@ -163,7 +203,9 @@
     "requires": [
       "crw_first_berth"
     ],
-    "tier": 1
+    "tier": 1,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "crw_shift_bell",
@@ -173,7 +215,9 @@
     "requires": [
       "crw_feed_trough"
     ],
-    "tier": 2
+    "tier": 2,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "crw_overseer_peg",
@@ -184,7 +228,9 @@
       "crw_shift_bell",
       "crw_second_berth"
     ],
-    "tier": 3
+    "tier": 3,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "crw_colony_hum",
@@ -195,7 +241,9 @@
       "crw_overseer_peg",
       "crw_third_berth"
     ],
-    "tier": 4
+    "tier": 4,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "str_yard_skin",
@@ -203,7 +251,9 @@
     "nameEn": "Yard Skin",
     "branch": "stratum",
     "requires": [],
-    "tier": 0
+    "tier": 0,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "str_city_vein",
@@ -213,7 +263,9 @@
     "requires": [
       "str_yard_skin"
     ],
-    "tier": 1
+    "tier": 1,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "str_fossil_bed",
@@ -223,7 +275,9 @@
     "requires": [
       "str_city_vein"
     ],
-    "tier": 2
+    "tier": 2,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "str_brine_shelf",
@@ -233,7 +287,9 @@
     "requires": [
       "str_fossil_bed"
     ],
-    "tier": 3
+    "tier": 3,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "str_core_hearth",
@@ -243,7 +299,9 @@
     "requires": [
       "str_brine_shelf"
     ],
-    "tier": 4
+    "tier": 4,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "str_scrape_dial",
@@ -253,7 +311,9 @@
     "requires": [
       "str_yard_skin"
     ],
-    "tier": 1
+    "tier": 1,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "str_gate_linger",
@@ -263,7 +323,9 @@
     "requires": [
       "str_scrape_dial"
     ],
-    "tier": 2
+    "tier": 2,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "str_gate_plunge",
@@ -273,7 +335,9 @@
     "requires": [
       "str_gate_linger"
     ],
-    "tier": 3
+    "tier": 3,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "str_gate_hearth",
@@ -283,7 +347,9 @@
     "requires": [
       "str_scrape_dial"
     ],
-    "tier": 2
+    "tier": 2,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "str_depth_notch",
@@ -294,7 +360,9 @@
       "str_core_hearth",
       "str_gate_plunge"
     ],
-    "tier": 5
+    "tier": 5,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "hrd_pocket_grit",
@@ -302,7 +370,9 @@
     "nameEn": "Pocket Grit",
     "branch": "hoard",
     "requires": [],
-    "tier": 0
+    "tier": 0,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "hrd_glint_lure",
@@ -312,7 +382,9 @@
     "requires": [
       "hrd_pocket_grit"
     ],
-    "tier": 1
+    "tier": 1,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "hrd_odd_cache",
@@ -322,7 +394,9 @@
     "requires": [
       "hrd_glint_lure"
     ],
-    "tier": 2
+    "tier": 2,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "hrd_catalog_ash",
@@ -332,7 +406,9 @@
     "requires": [
       "hrd_odd_cache"
     ],
-    "tier": 3
+    "tier": 3,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "hrd_sale_chalk",
@@ -342,7 +418,9 @@
     "requires": [
       "hrd_pocket_grit"
     ],
-    "tier": 1
+    "tier": 1,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "hrd_first_tithe",
@@ -352,7 +430,9 @@
     "requires": [
       "hrd_sale_chalk"
     ],
-    "tier": 2
+    "tier": 2,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "hrd_streak_cord",
@@ -362,7 +442,9 @@
     "requires": [
       "hrd_first_tithe"
     ],
-    "tier": 3
+    "tier": 3,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "hrd_museum_echo",
@@ -372,7 +454,9 @@
     "requires": [
       "hrd_catalog_ash"
     ],
-    "tier": 4
+    "tier": 4,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "hrd_bulk_sling",
@@ -382,7 +466,9 @@
     "requires": [
       "hrd_streak_cord"
     ],
-    "tier": 4
+    "tier": 4,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "hrd_empire_till",
@@ -393,7 +479,9 @@
       "hrd_museum_echo",
       "hrd_bulk_sling"
     ],
-    "tier": 5
+    "tier": 5,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "rft_first_crack",
@@ -403,7 +491,11 @@
     "requires": [
       "ves_rim_hold"
     ],
-    "tier": 1
+    "tier": 1,
+    "cost": 1,
+    "effects": {
+      "unlockBreakthrough": true
+    }
   },
   {
     "id": "rft_shoulder_burst",
@@ -413,7 +505,9 @@
     "requires": [
       "rft_first_crack"
     ],
-    "tier": 2
+    "tier": 2,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "rft_soil_sigh",
@@ -423,7 +517,9 @@
     "requires": [
       "rft_first_crack"
     ],
-    "tier": 2
+    "tier": 2,
+    "cost": 1,
+    "effects": {}
   },
   {
     "id": "rft_last_push",
@@ -434,6 +530,8 @@
       "rft_shoulder_burst",
       "rft_soil_sigh"
     ],
-    "tier": 3
+    "tier": 3,
+    "cost": 1,
+    "effects": {}
   }
 ]

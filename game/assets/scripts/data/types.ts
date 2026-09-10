@@ -82,6 +82,15 @@ export type WorkerConfig = {
   blurbEn: string;
 };
 
+export type SkillNodeEffect = {
+  /** Flat bonus added to each scoop's tool power. */
+  digPower?: number;
+  /** Multiplier added to hired-worker digRate (0.5 = +50%). */
+  workerMul?: number;
+  /** Unlocks the overheat-shovel breakthrough. */
+  unlockBreakthrough?: boolean;
+};
+
 export type SkillNodeConfig = {
   id: string;
   nameZh: string;
@@ -89,6 +98,23 @@ export type SkillNodeConfig = {
   branch: SkillBranchId;
   requires: string[];
   tier: number;
+  cost: number;
+  effects: SkillNodeEffect;
+};
+
+export const LOOT_KINDS = ["mud", "gold", "oddment", "relic_chip"] as const;
+
+export type LootKind = (typeof LOOT_KINDS)[number];
+
+export type LootConfig = {
+  id: string;
+  nameZh: string;
+  nameEn: string;
+  kind: LootKind;
+  sellValue: number;
+  weight: number;
+  /** Empty string = every layer. */
+  layerId: string;
 };
 
 export type StaminaUpgradeTier = {
@@ -155,6 +181,7 @@ export type GameConfigs = {
   rules: RulesConfig;
   workers: WorkerConfig[];
   skillNodes: SkillNodeConfig[];
+  loot: LootConfig[];
 };
 
 export const CONFIG_ID_PATTERN = /^[a-z][a-z0-9_]*$/;
