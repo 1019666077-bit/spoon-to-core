@@ -16,6 +16,7 @@ const files = {
   "rules.json": CONFIG_BUNDLE.rules,
   "workers.json": CONFIG_BUNDLE.workers,
   "skill_nodes.json": CONFIG_BUNDLE.skillNodes,
+  "loot.json": CONFIG_BUNDLE.loot,
 };
 
 for (const dir of dirs) {

@@ -1,23 +1,9 @@
 import type { GameConfigs, ToolConfig } from "../data/types";
-import type { SaveData } from "../save/SaveSchema";
+import { cloneSave, type SaveData } from "../save/SaveSchema";
 
 export type BuyResult =
   | { ok: true; save: SaveData; spent: number }
   | { ok: false; reason: "poor" | "max" | "unknown"; save: SaveData };
-
-function cloneSave(save: SaveData): SaveData {
-  return {
-    ...save,
-    upgrades: { ...save.upgrades },
-    unlockedLayerIds: [...save.unlockedLayerIds],
-    catalog: { ...save.catalog },
-    quests: { ...save.quests },
-    settings: { ...save.settings },
-    entitlements: { ads: {}, iap: {} },
-    workerRoster: [...save.workerRoster],
-    unlockedSkillNodeIds: [...save.unlockedSkillNodeIds],
-  };
-}
 
 export function staminaMax(save: SaveData, configs: GameConfigs): number {
   const tier = configs.upgrades.stamina.find((t) => t.level === save.upgrades.staminaLevel);

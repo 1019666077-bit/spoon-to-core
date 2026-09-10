@@ -1,6 +1,6 @@
 import type { ToolForm } from "../data/types";
 
-export const SAVE_SCHEMA_VERSION = 3;
+export const SAVE_SCHEMA_VERSION = 4;
 export const SAVE_KEY = "spoon-to-core.save";
 export const SAVE_BACKUP_KEY = "spoon-to-core.save.bak";
 
@@ -57,6 +57,20 @@ export type SaveData = {
   toolForm: ToolForm;
   /** 0–1 scrape progress on the current layer dirt field. */
   scrapeProgress: number;
+  /** Spendable tree points from dirt milestones / layer progress. */
+  skillPoints: number;
+  /** Lifetime dirt scooped on the empire path. */
+  lifetimeDirt: number;
+  /** Puzzle-shard counter for the relic placeholder. */
+  shardPieces: number;
+  /** Filled relic slots (cap in relics.ts). */
+  relicSlotsFilled: number;
+  /** Current outing: dirt dealt by hired crew. */
+  workerPeriodDirt: number;
+  /** Current outing: gold produced by hired crew. */
+  workerPeriodGold: number;
+  /** Remaining breakthrough cooldown seconds. */
+  breakthroughCooldown: number;
 };
 
 export function createDefaultSave(now: number = 0): SaveData {
@@ -93,6 +107,29 @@ export function createDefaultSave(now: number = 0): SaveData {
     unlockedSkillNodeIds: [],
     toolForm: STARTING_TOOL_FORM,
     scrapeProgress: 0,
+    skillPoints: 0,
+    lifetimeDirt: 0,
+    shardPieces: 0,
+    relicSlotsFilled: 0,
+    workerPeriodDirt: 0,
+    workerPeriodGold: 0,
+    breakthroughCooldown: 0,
+  };
+}
+
+export function cloneSave(save: SaveData): SaveData {
+  return {
+    ...save,
+    upgrades: { ...save.upgrades },
+    unlockedLayerIds: [...save.unlockedLayerIds],
+    catalog: { ...save.catalog },
+    quests: { ...save.quests },
+    settings: { ...save.settings },
+    entitlements: { ads: {}, iap: {} },
+    workerRoster: [...save.workerRoster],
+    unlockedSkillNodeIds: [...save.unlockedSkillNodeIds],
+    bestDepthByLayer: { ...save.bestDepthByLayer },
+    consumableStock: { ...save.consumableStock },
   };
 }
 
@@ -110,6 +147,7 @@ export const LEGACY_TOOL_IDS: Record<string, string> = {
 export const TOOL_FORM_BY_ID: Record<string, ToolForm> = {
   chipped_bowl: "bowl",
   hearth_shovel: "shovel",
+  yard_iron_shovel: "shovel",
   twin_bit_shovel: "shovel",
   quake_shovel: "shovel",
   whirl_auger: "auger",

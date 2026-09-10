@@ -1,9 +1,12 @@
 import {
   RARITY_COLORS,
   type GameConfigs,
+  type LootConfig,
+  type LootKind,
   type Rarity,
   type SkillBranchId,
   type SkillNodeConfig,
+  type SkillNodeEffect,
   type TreasureConfig,
 } from "./types";
 
@@ -39,14 +42,28 @@ function skill(
   branch: SkillBranchId,
   requires: string[],
   tier: number,
+  effects: SkillNodeEffect = {},
+  cost = 1,
 ): SkillNodeConfig {
-  return { id, nameZh, nameEn, branch, requires, tier };
+  return { id, nameZh, nameEn, branch, requires, tier, cost, effects };
 }
 
-/** ≥40 visible-node table, ≥4 branches. Most stay locked until stage 1′. */
+function loot(
+  id: string,
+  nameZh: string,
+  nameEn: string,
+  kind: LootKind,
+  sellValue: number,
+  weight: number,
+  layerId = "",
+): LootConfig {
+  return { id, nameZh, nameEn, kind, sellValue, weight, layerId };
+}
+
+/** ≥40 visible-node table, ≥4 branches. Early vessel/crew nodes are perceptible. */
 export const SKILL_TREE_NODES: SkillNodeConfig[] = [
-  skill("ves_rim_hold", "碗沿扣手", "Rim Hold", "vessel", [], 0),
-  skill("ves_clay_temper", "陶泥回火", "Clay Temper", "vessel", ["ves_rim_hold"], 1),
+  skill("ves_rim_hold", "碗沿扣手", "Rim Hold", "vessel", [], 0, { digPower: 1 }),
+  skill("ves_clay_temper", "陶泥回火", "Clay Temper", "vessel", ["ves_rim_hold"], 1, { digPower: 1 }),
   skill("ves_haft_bind", "铲柄缠麻", "Haft Bind", "vessel", ["ves_clay_temper"], 2),
   skill("ves_blade_flare", "铲刃展唇", "Blade Flare", "vessel", ["ves_haft_bind"], 3),
   skill("ves_twin_ridge", "双脊分土", "Twin Ridge", "vessel", ["ves_blade_flare"], 4),
@@ -56,8 +73,8 @@ export const SKILL_TREE_NODES: SkillNodeConfig[] = [
   skill("ves_void_lip", "虚空舀唇", "Void Lip", "vessel", ["ves_ion_groove"], 8),
   skill("ves_form_oath", "器形成约", "Form Oath", "vessel", ["ves_void_lip"], 9),
 
-  skill("crw_first_berth", "第一编制席", "First Berth", "crew", [], 0),
-  skill("crw_spore_hatch", "牙孢破壳", "Spore Hatch", "crew", ["crw_first_berth"], 1),
+  skill("crw_first_berth", "第一编制席", "First Berth", "crew", [], 0, { workerMul: 0.5 }),
+  skill("crw_spore_hatch", "牙孢破壳", "Spore Hatch", "crew", ["crw_first_berth"], 1, { workerMul: 0.5 }),
   skill("crw_ram_kiln", "夯偶入窑", "Ram Kiln", "crew", ["crw_spore_hatch"], 2),
   skill("crw_root_chant", "根须颂词", "Root Chant", "crew", ["crw_ram_kiln"], 3),
   skill("crw_second_berth", "第二编制席", "Second Berth", "crew", ["crw_spore_hatch"], 2),
@@ -89,7 +106,7 @@ export const SKILL_TREE_NODES: SkillNodeConfig[] = [
   skill("hrd_bulk_sling", "大宗吊袋", "Bulk Sling", "hoard", ["hrd_streak_cord"], 4),
   skill("hrd_empire_till", "帝国钱匣", "Empire Till", "hoard", ["hrd_museum_echo", "hrd_bulk_sling"], 5),
 
-  skill("rft_first_crack", "第一道破隙", "First Crack", "rift", ["ves_rim_hold"], 1),
+  skill("rft_first_crack", "第一道破隙", "First Crack", "rift", ["ves_rim_hold"], 1, { unlockBreakthrough: true }),
   skill("rft_shoulder_burst", "肩一瞬爆发", "Shoulder Burst", "rift", ["rft_first_crack"], 2),
   skill("rft_soil_sigh", "土面长叹", "Soil Sigh", "rift", ["rft_first_crack"], 2),
   skill("rft_last_push", "末力一舀", "Last Push", "rift", ["rft_shoulder_burst", "rft_soil_sigh"], 3),
@@ -172,13 +189,14 @@ export const CONFIG_BUNDLE: GameConfigs = {
     treasure("god_soup_bowl", "神明遗失的汤碗", "God's Soup Bowl", "absurd", 3200, S4, "core"),
   ],
   tools: [
-    { id: "chipped_bowl", nameZh: "开裂饭碗", nameEn: "Chipped Bowl", power: 1, attackInterval: 0.32, price: 0, form: "bowl" },
-    { id: "hearth_shovel", nameZh: "灶间铲", nameEn: "Hearth Shovel", power: 2, attackInterval: 0.3, price: 150, form: "shovel" },
-    { id: "twin_bit_shovel", nameZh: "双脊夯铲", nameEn: "Twin-Ridge Shovel", power: 3, attackInterval: 0.27, price: 500, form: "shovel" },
-    { id: "quake_shovel", nameZh: "震脉铲", nameEn: "Quake Shovel", power: 5, attackInterval: 0.24, price: 1400, form: "shovel" },
-    { id: "whirl_auger", nameZh: "涡旋钻铲", nameEn: "Whirl Auger", power: 8, attackInterval: 0.2, price: 4200, form: "auger" },
-    { id: "ion_core_shovel", nameZh: "离子芯铲", nameEn: "Ion-Core Shovel", power: 13, attackInterval: 0.16, price: 12000, form: "shovel" },
-    { id: "void_scoop", nameZh: "虚空舀铲", nameEn: "Void Scoop", power: 21, attackInterval: 0.12, price: 36000, form: "scoop" },
+    { id: "chipped_bowl", nameZh: "开裂饭碗", nameEn: "Chipped Bowl", power: 1, attackInterval: 0.48, price: 0, form: "bowl" },
+    { id: "hearth_shovel", nameZh: "灶间铲", nameEn: "Hearth Shovel", power: 4, attackInterval: 0.22, price: 80, form: "shovel" },
+    { id: "yard_iron_shovel", nameZh: "工地铁铲", nameEn: "Yard-Iron Shovel", power: 6, attackInterval: 0.18, price: 180, form: "shovel" },
+    { id: "twin_bit_shovel", nameZh: "双脊夯铲", nameEn: "Twin-Ridge Shovel", power: 8, attackInterval: 0.16, price: 500, form: "shovel" },
+    { id: "quake_shovel", nameZh: "震脉铲", nameEn: "Quake Shovel", power: 11, attackInterval: 0.14, price: 1400, form: "shovel" },
+    { id: "whirl_auger", nameZh: "涡旋钻铲", nameEn: "Whirl Auger", power: 15, attackInterval: 0.12, price: 4200, form: "auger" },
+    { id: "ion_core_shovel", nameZh: "离子芯铲", nameEn: "Ion-Core Shovel", power: 20, attackInterval: 0.11, price: 12000, form: "shovel" },
+    { id: "void_scoop", nameZh: "虚空舀铲", nameEn: "Void Scoop", power: 28, attackInterval: 0.1, price: 36000, form: "scoop" },
   ],
   layers: [
     {
@@ -379,8 +397,8 @@ export const CONFIG_BUNDLE: GameConfigs = {
       nameZh: "牙孢子伴掘虫",
       nameEn: "Fangspore Diggerling",
       slot: 0,
-      hirePrice: 80,
-      digRate: 0.15,
+      hirePrice: 50,
+      digRate: 0.8,
       blurbZh: "贴着碗沿啃松土的小型伴掘虫。",
       blurbEn: "A small diggerling that gnaws loose soil along the bowl rim.",
     },
@@ -406,4 +424,26 @@ export const CONFIG_BUNDLE: GameConfigs = {
     },
   ],
   skillNodes: SKILL_TREE_NODES,
+  loot: [
+    loot("damp_clod", "潮泥团", "Damp Clod", "mud", 1, 24, "backyard"),
+    loot("packed_loam", "夯黄土", "Packed Loam", "mud", 2, 16, "backyard"),
+    loot("clay_ribbon", "黏土条", "Clay Ribbon", "mud", 2, 12),
+    loot("kiln_slag", "窑渣", "Kiln Slag", "mud", 3, 10, "lost_city"),
+    loot("grit_flake", "砂金屑", "Grit Flake", "gold", 5, 10, "backyard"),
+    loot("copper_bit", "铜末", "Copper Bit", "gold", 4, 8),
+    loot("brass_tack", "铜钉", "Brass Tack", "gold", 7, 6, "lost_city"),
+    loot("chipped_tile", "碎瓷片", "Chipped Tile", "oddment", 6, 8, "backyard"),
+    loot("bottle_neck", "瓶口残环", "Bottle Neck", "oddment", 7, 6, "backyard"),
+    loot("rust_washer", "锈垫圈", "Rust Washer", "oddment", 5, 7),
+    loot("seed_hull", "种壳", "Seed Hull", "oddment", 3, 8, "backyard"),
+    loot("glass_bead", "玻璃珠", "Glass Bead", "oddment", 8, 5),
+    loot("charcoal_nub", "炭粒", "Charcoal Nub", "oddment", 4, 6),
+    loot("bone_splinter", "骨刺屑", "Bone Splinter", "oddment", 6, 5, "dino_grave"),
+    loot("mica_chip", "云母片", "Mica Chip", "oddment", 9, 4, "lost_city"),
+    loot("river_pebble", "河光石", "River Pebble", "oddment", 5, 7, "undersea"),
+    loot("wax_crumb", "蜡屑", "Wax Crumb", "oddment", 4, 5),
+    loot("silk_thread", "土丝", "Soil Silk", "oddment", 6, 4),
+    loot("rim_chip", "碗沿残片", "Rim Chip", "relic_chip", 0, 3),
+    loot("gate_splinter", "层闸木刺", "Gate Splinter", "relic_chip", 0, 2),
+  ],
 };

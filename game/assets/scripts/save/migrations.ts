@@ -167,6 +167,13 @@ export function migrateSave(raw: unknown, now: number = 0): MigrationResult {
     unlockedSkillNodeIds: migrateStringArray(raw.unlockedSkillNodeIds),
     toolForm: migrateToolForm(raw.toolForm, upgrades.toolId),
     scrapeProgress: clamp01(num(raw.scrapeProgress, defaults.scrapeProgress, 0)),
+    skillPoints: num(raw.skillPoints, defaults.skillPoints, 0),
+    lifetimeDirt: num(raw.lifetimeDirt, defaults.lifetimeDirt, 0),
+    shardPieces: num(raw.shardPieces, defaults.shardPieces, 0),
+    relicSlotsFilled: num(raw.relicSlotsFilled, defaults.relicSlotsFilled, 0),
+    workerPeriodDirt: num(raw.workerPeriodDirt, defaults.workerPeriodDirt, 0),
+    workerPeriodGold: num(raw.workerPeriodGold, defaults.workerPeriodGold, 0),
+    breakthroughCooldown: num(raw.breakthroughCooldown, defaults.breakthroughCooldown, 0),
   };
 
   const migrated = version < SAVE_SCHEMA_VERSION;

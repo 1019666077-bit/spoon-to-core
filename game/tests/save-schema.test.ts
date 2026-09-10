@@ -19,6 +19,8 @@ describe("save schema and migration", () => {
     assert.deepEqual(save.workerRoster, []);
     assert.deepEqual(save.unlockedSkillNodeIds, []);
     assert.equal(save.scrapeProgress, 0);
+    assert.equal(save.skillPoints, 0);
+    assert.equal(save.relicSlotsFilled, 0);
     assert.deepEqual(save.unlockedLayerIds, ["backyard"]);
     assert.equal(save.lastSafeSaveAt, 1000);
     assert.equal(save.tutorialCompleted, false);

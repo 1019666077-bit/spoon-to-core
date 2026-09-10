@@ -4,7 +4,7 @@
     "nameZh": "开裂饭碗",
     "nameEn": "Chipped Bowl",
     "power": 1,
-    "attackInterval": 0.32,
+    "attackInterval": 0.48,
     "price": 0,
     "form": "bowl"
   },
@@ -12,17 +12,26 @@
     "id": "hearth_shovel",
     "nameZh": "灶间铲",
     "nameEn": "Hearth Shovel",
-    "power": 2,
-    "attackInterval": 0.3,
-    "price": 150,
+    "power": 4,
+    "attackInterval": 0.22,
+    "price": 80,
+    "form": "shovel"
+  },
+  {
+    "id": "yard_iron_shovel",
+    "nameZh": "工地铁铲",
+    "nameEn": "Yard-Iron Shovel",
+    "power": 6,
+    "attackInterval": 0.18,
+    "price": 180,
     "form": "shovel"
   },
   {
     "id": "twin_bit_shovel",
     "nameZh": "双脊夯铲",
     "nameEn": "Twin-Ridge Shovel",
-    "power": 3,
-    "attackInterval": 0.27,
+    "power": 8,
+    "attackInterval": 0.16,
     "price": 500,
     "form": "shovel"
   },
@@ -30,8 +39,8 @@
     "id": "quake_shovel",
     "nameZh": "震脉铲",
     "nameEn": "Quake Shovel",
-    "power": 5,
-    "attackInterval": 0.24,
+    "power": 11,
+    "attackInterval": 0.14,
     "price": 1400,
     "form": "shovel"
   },
@@ -39,8 +48,8 @@
     "id": "whirl_auger",
     "nameZh": "涡旋钻铲",
     "nameEn": "Whirl Auger",
-    "power": 8,
-    "attackInterval": 0.2,
+    "power": 15,
+    "attackInterval": 0.12,
     "price": 4200,
     "form": "auger"
   },
@@ -48,8 +57,8 @@
     "id": "ion_core_shovel",
     "nameZh": "离子芯铲",
     "nameEn": "Ion-Core Shovel",
-    "power": 13,
-    "attackInterval": 0.16,
+    "power": 20,
+    "attackInterval": 0.11,
     "price": 12000,
     "form": "shovel"
   },
@@ -57,8 +66,8 @@
     "id": "void_scoop",
     "nameZh": "虚空舀铲",
     "nameEn": "Void Scoop",
-    "power": 21,
-    "attackInterval": 0.12,
+    "power": 28,
+    "attackInterval": 0.1,
     "price": 36000,
     "form": "scoop"
   }
