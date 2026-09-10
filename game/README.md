@@ -2,7 +2,7 @@
 
 This folder is the **official game**. Open it with **Cocos Creator 3.8.8**.
 
-Stage **1′** is the first playable empire loop: click / hold the dirt patch, bowl → shovel, the Fangspore Diggerling ticks, the skill tree spends points, layer-end descend is real, and 过热铲 is the first breakthrough. The old grid-dig session stays for leftover tests; `GameView` does not use it as the main UI.
+Stage **1.5′** is the digging look: boot lands on the dirt pit with a vector chipped bowl (then a spade after upgrade). Home is a secondary hub. Stage **1′** empire loop is unchanged.
 
 ## Open
 
@@ -29,14 +29,15 @@ Dump `CONFIG_BUNDLE` into `assets/config` + `assets/resources/config`:
 npm run sync-config
 ```
 
-## Greybox (stage 1′)
+## Greybox (stage 1.5′)
 
-- Home: gold, depth, 开始挖土, 灶间铺, hireable crew berths, 根系图谱, 帝国账册.
-- Dig: click or hold the dirt patch; drops mud / gold / oddments; HUD shows the current tool form.
-- First shovel buy (灶间铲 / 工地铁铲) changes power and interval.
+- Boot opens `digging`: dirt patches + bowl/shovel silhouette, not the Home button wall.
+- Home is a secondary hub (`回中枢` / `回到土面`).
+- Dig: click or hold the dirt patches; remaining dirt and cracks are visible; the tool swings on a hit.
+- First shovel buy (灶间铲 / 工地铁铲) swaps the silhouette from bowl to spade. Tool id `chipped_bowl` is unchanged.
 - 牙孢子伴掘虫 ticks dirt and gold; Stats shows period output and 工作/怠工.
-- Layer gate: 继续搜刮 / 下潜 (next layer hardness + loot) / 回 Home.
+- Layer gate: 继续搜刮 / 下潜 (next layer hardness + loot) / 回中枢.
 - 过热铲: short dig surge + cooldown after a shovel or the first rift node.
 - Save `schemaVersion: 4` with skill points, relics / shards, crew period, breakthrough CD.
 
-Version: `0.7.0-empire1`.
+Version: `0.7.1-feel`.

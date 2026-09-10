@@ -23,20 +23,18 @@ function takeSequence(app: { rng: { next(): number } }, n: number): number[] {
 }
 
 describe("GameApp states", () => {
-  it("boots into home, persists a current-schema save, and enters digging", async () => {
+  it("boots into digging, persists a current-schema save, and keeps the bowl", async () => {
     const { app, platform, saveErrors } = await bootWithSeed(7, 42);
-    assert.equal(app.state, GameStates.Home);
+    assert.equal(app.state, GameStates.Digging);
     assert.equal(app.save.schemaVersion, SAVE_SCHEMA_VERSION);
     assert.equal(app.save.bootCount, 1);
     assert.deepEqual(saveErrors, ["missing-save"]);
-
-    app.startDigging();
-    assert.equal(app.state, GameStates.Digging);
     assert.equal(app.rng.seed, 7);
     assert.equal(app.runSeed, 7);
     assert.ok(app.session);
     assert.ok(app.dirtField);
     assert.equal(app.tool.form, "bowl");
+    assert.equal(app.tool.id, "chipped_bowl");
     assert.equal(app.session?.map.width, CONFIG_BUNDLE.rules.mapWidth);
     assert.equal(platform.isGameplayActive, true);
   });
@@ -46,7 +44,7 @@ describe("GameApp states", () => {
     await bootGame({ platform, configs: CONFIG_BUNDLE, now: () => 1, seed: 1 });
     const second = await bootGame({ platform, configs: CONFIG_BUNDLE, now: () => 2, seed: 1 });
     assert.equal(second.app.save.bootCount, 2);
-    assert.equal(second.app.state, GameStates.Home);
+    assert.equal(second.app.state, GameStates.Digging);
   });
 
   it("WebAdapter ads return an explicit simulated failure, never a silent success", async () => {
@@ -60,11 +58,9 @@ describe("GameApp states", () => {
     assert.equal(interstitial.reason, "hidden");
   });
 
-  it("Home → Digging → Result → Home is operable", async () => {
+  it("Digging → Result → Home → Digging is operable", async () => {
     const { app } = await bootWithSeed(11);
     const states: string[] = [app.state];
-    app.startDigging();
-    states.push(app.state);
     app.returnFromDig();
     states.push(app.state);
     app.acknowledgeResult();
@@ -76,7 +72,6 @@ describe("GameApp states", () => {
     app.acknowledgeResult();
     states.push(app.state);
     assert.deepEqual(states, [
-      GameStates.Home,
       GameStates.Digging,
       GameStates.Result,
       GameStates.Home,
@@ -91,6 +86,9 @@ describe("GameApp seed replay", () => {
   it("keeps the boot-injected seed when startDigging has no argument", async () => {
     const { app } = await bootWithSeed(20260908);
     assert.equal(app.injectedSeed, 20260908);
+    assert.equal(app.rng.seed, 20260908);
+    assert.equal(app.session?.seed, 20260908);
+    app.leaveDigForHome();
     app.startDigging();
     assert.equal(app.rng.seed, 20260908);
     assert.equal(app.session?.seed, 20260908);
@@ -139,7 +137,6 @@ describe("GameApp seed replay", () => {
 describe("GameApp run economy", () => {
   it("settles gold and catalog, then first-run subsidy if needed", async () => {
     const { app } = await bootWithSeed(10001);
-    app.startDigging();
     assert.equal(app.session?.firstRun, true);
     app.returnFromDig();
     assert.equal(app.state, GameStates.Result);

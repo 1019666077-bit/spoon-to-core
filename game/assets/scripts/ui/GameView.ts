@@ -15,6 +15,22 @@ import { OVERHEAT_NAME_ZH } from "../gameplay/breakthrough";
 import { relicProgressLabel } from "../gameplay/relics";
 import { nodeStatus } from "../gameplay/skillTree";
 import { crewStatusLabel } from "../gameplay/workers";
+import {
+  createDigFeel,
+  DIRT_FIELD_H,
+  DIRT_FIELD_W,
+  dirtDrawCommands,
+  dirtProgress01,
+  formLabelZh,
+  noteDirtChange,
+  progressBarCommands,
+  swingPose,
+  tickDigFeel,
+  toolDrawCommands,
+  toolSilhouette,
+  type DigFeelState,
+  type DrawCmd,
+} from "./digFeel";
 import { ThemeConfig } from "./ThemeConfig";
 
 const { ccclass } = _decorator;
@@ -42,6 +58,7 @@ export class GameView extends Component {
   private app: GameApp | null = null;
   private unsub: (() => void) | null = null;
   private homeNode: Node | null = null;
+  private hudNode: Node | null = null;
   private digNode: Node | null = null;
   private choiceNode: Node | null = null;
   private resultNode: Node | null = null;
@@ -52,6 +69,9 @@ export class GameView extends Component {
   private depthLabel: Label | null = null;
   private resultLabel: Label | null = null;
   private dirtGfx: Graphics | null = null;
+  private toolGfx: Graphics | null = null;
+  private toolNode: Node | null = null;
+  private progressGfx: Graphics | null = null;
   private dirtLabel: Label | null = null;
   private toolLabel: Label | null = null;
   private hintLabel: Label | null = null;
@@ -64,6 +84,7 @@ export class GameView extends Component {
   private treeLabels: Label[] = [];
   private treeGfx: Graphics[] = [];
   private treeIds: string[] = [];
+  private feel: DigFeelState = createDigFeel();
 
   bind(app: GameApp): void {
     this.app = app;
@@ -79,7 +100,11 @@ export class GameView extends Component {
 
   update(dt: number): void {
     this.app?.tick(dt);
-    if (this.app?.state === GameStates.Digging) this.drawDirt();
+    this.feel = tickDigFeel(this.feel, dt);
+    if (this.app?.state === GameStates.Digging) {
+      this.observeDirt();
+      this.drawDigScene();
+    }
   }
 
   private build(): void {
@@ -87,12 +112,16 @@ export class GameView extends Component {
     const W = ThemeConfig.designWidth;
     const H = ThemeConfig.designHeight;
 
+    this.hudNode = addLayer(root, "HudLayer", W, H);
+    this.goldLabel = this.makeLabel(this.hudNode, "Gold", "金币 0", 24, -480, 330);
+    this.depthLabel = this.makeLabel(this.hudNode, "Depth", "深度 0 米", 24, 480, 330);
+    this.makeLabel(this.hudNode, "Version", `v${GAME_VERSION}`, 18, -560, -340).color =
+      hexColor(ThemeConfig.muted);
+
     this.homeNode = addLayer(root, "HomeLayer", W, H);
-    this.makeLabel(this.homeNode, "Title", GAME_TITLE_ZH, 56, 0, 300).isBold = true;
-    this.goldLabel = this.makeLabel(this.homeNode, "Gold", "金币 0", 26, -220, 230);
-    this.depthLabel = this.makeLabel(this.homeNode, "Depth", "深度 0 米", 26, 220, 230);
-    const start = this.makeButton(this.homeNode, "StartDig", "开始挖土", 0, 150, 240, 76);
-    start.node.on(Button.EventType.CLICK, () => this.app?.startDigging(), this);
+    this.makeLabel(this.homeNode, "Title", `${GAME_TITLE_ZH} · 中枢`, 48, 0, 260).isBold = true;
+    const resume = this.makeButton(this.homeNode, "StartDig", "回到土面", 0, 170, 240, 72);
+    resume.node.on(Button.EventType.CLICK, () => this.app?.startDigging(), this);
 
     this.makeLabel(this.homeNode, "CrewTitle", "雇工编制（点席雇佣）", 22, -360, 70).color =
       hexColor(ThemeConfig.muted);
@@ -119,28 +148,49 @@ export class GameView extends Component {
     tree.node.on(Button.EventType.CLICK, () => this.app?.setHomePanel("tree"), this);
     const stats = this.makeButton(this.homeNode, "OpenStats", "帝国账册", 320, -220, 180, 64);
     stats.node.on(Button.EventType.CLICK, () => this.app?.setHomePanel("stats"), this);
-    this.makeLabel(this.homeNode, "Version", `v${GAME_VERSION}`, 20, -560, -320).color =
-      hexColor(ThemeConfig.muted);
 
     this.digNode = addLayer(root, "DigLayer", W, H);
-    this.toolLabel = this.makeLabel(this.digNode, "ToolHud", "当前工具：碗", 28, 0, 300);
-    const dirtHost = addLayer(this.digNode, "DirtField", 520, 280);
-    dirtHost.setPosition(0, 20, 0);
+    const pitBg = addLayer(this.digNode, "PitBg", W, H);
+    const pitGfx = pitBg.addComponent(Graphics);
+    pitGfx.fillColor = hexColor(ThemeConfig.soil3);
+    pitGfx.rect(-W / 2, -H / 2, W, H);
+    pitGfx.fill();
+    pitGfx.fillColor = hexColor(ThemeConfig.soil2);
+    pitGfx.rect(-W / 2, -H / 2, W, H * 0.28);
+    pitGfx.fill();
+    pitGfx.fillColor = hexColor(ThemeConfig.pit);
+    pitGfx.roundRect(-DIRT_FIELD_W / 2 - 36, -DIRT_FIELD_H / 2 - 12, DIRT_FIELD_W + 72, DIRT_FIELD_H + 72, 40);
+    pitGfx.fill();
+    this.toolLabel = this.makeLabel(this.digNode, "ToolHud", "当前工具：开裂饭碗 · 碗", 26, 0, 330);
+    const dirtHost = addLayer(this.digNode, "DirtField", DIRT_FIELD_W, DIRT_FIELD_H);
+    dirtHost.setPosition(0, 24, 0);
     this.dirtGfx = dirtHost.addComponent(Graphics);
-    const dirtHit = this.makeButton(this.digNode, "DirtHit", "", 0, 20, 520, 280);
+    const dirtHit = this.makeButton(this.digNode, "DirtHit", "", 0, 24, DIRT_FIELD_W, DIRT_FIELD_H);
     dirtHit.node.on(Node.EventType.TOUCH_START, () => this.app?.setDirtHeld(true), this);
     dirtHit.node.on(Node.EventType.TOUCH_END, () => this.app?.setDirtHeld(false), this);
     dirtHit.node.on(Node.EventType.TOUCH_CANCEL, () => this.app?.setDirtHeld(false), this);
-    this.dirtLabel = this.makeLabel(this.digNode, "DirtRemain", "剩余土量 0", 26, 0, -160);
-    this.hintLabel = this.makeLabel(this.digNode, "Hint", "", 22, 0, 250);
-    this.dropLabel = this.makeLabel(this.digNode, "DropLog", "", 20, 0, -200);
-    const burst = this.makeButton(this.digNode, "Overheat", OVERHEAT_NAME_ZH, 420, 280, 180, 56);
+    const toolHost = addLayer(this.digNode, "ToolSilhouette", 220, 240);
+    toolHost.setPosition(300, 40, 0);
+    this.toolNode = toolHost;
+    this.toolGfx = toolHost.addComponent(Graphics);
+    const barHost = addLayer(this.digNode, "DirtProgress", 640, 22);
+    barHost.setPosition(0, -210, 0);
+    this.progressGfx = barHost.addComponent(Graphics);
+    this.dirtLabel = this.makeLabel(this.digNode, "DirtRemain", "剩余土量 0", 22, 0, -242);
+    this.hintLabel = this.makeLabel(this.digNode, "Hint", "", 20, 0, 292);
+    this.dropLabel = this.makeLabel(this.digNode, "DropLog", "", 20, 0, -272);
+    const burst = this.makeButton(this.digNode, "Overheat", OVERHEAT_NAME_ZH, -360, -318, 160, 48);
     burst.node.on(Button.EventType.CLICK, () => this.app?.useBreakthrough(), this);
     this.burstLabel = burst.node.getChildByName("Label")?.getComponent(Label) ?? null;
-    const gate = this.makeButton(this.digNode, "OpenGate", "层末抉择", -160, -280, 180, 56);
+    if (this.burstLabel) this.burstLabel.fontSize = 20;
+    const gate = this.makeButton(this.digNode, "OpenGate", "层末抉择", 0, -318, 160, 48);
     gate.node.on(Button.EventType.CLICK, () => this.app?.enterLayerChoice(), this);
-    const home = this.makeButton(this.digNode, "ReturnHome", "回 Home", 160, -280, 180, 56);
+    const gateLabel = gate.node.getChildByName("Label")?.getComponent(Label);
+    if (gateLabel) gateLabel.fontSize = 20;
+    const home = this.makeButton(this.digNode, "ReturnHome", "回中枢", 360, -318, 160, 48);
     home.node.on(Button.EventType.CLICK, () => this.app?.leaveDigForHome(), this);
+    const homeLabel = home.node.getChildByName("Label")?.getComponent(Label);
+    if (homeLabel) homeLabel.fontSize = 20;
 
     this.choiceNode = addLayer(root, "LayerChoiceLayer", W, H);
     this.makeLabel(this.choiceNode, "ChoiceTitle", "这一层挖完了", 40, 0, 160).isBold = true;
@@ -148,7 +198,7 @@ export class GameView extends Component {
     linger.node.on(Button.EventType.CLICK, () => this.app?.continueScavenge(), this);
     const plunge = this.makeButton(this.choiceNode, "Plunge", "下潜", 0, 0, 200, 64);
     plunge.node.on(Button.EventType.CLICK, () => this.app?.descendLayer(), this);
-    const nest = this.makeButton(this.choiceNode, "Nest", "回 Home", 240, 0, 200, 64);
+    const nest = this.makeButton(this.choiceNode, "Nest", "回中枢", 240, 0, 200, 64);
     nest.node.on(Button.EventType.CLICK, () => this.app?.returnHomeFromLayer(), this);
 
     this.resultNode = addLayer(root, "ResultLayer", W, H);
@@ -191,7 +241,7 @@ export class GameView extends Component {
     const shopBack = this.makeButton(this.shopNode, "ShopBack", "返回中枢", 0, -220, 200, 56);
     shopBack.node.on(Button.EventType.CLICK, () => this.app?.setHomePanel("hub"), this);
 
-    this.toastLabel = this.makeLabel(root, "Toast", "", 22, 0, -330);
+    this.toastLabel = this.makeLabel(root, "Toast", "", 22, 0, -350);
   }
 
   private buildTreeGrid(parent: Node): void {
@@ -238,11 +288,14 @@ export class GameView extends Component {
     if (!this.app) return;
     const home = this.app.state === GameStates.Home;
     const overlay = this.app.homePanel;
-    if (this.homeNode) this.homeNode.active = home && overlay !== "tree" && overlay !== "stats" && overlay !== "shop";
+    const hub = home && overlay !== "tree" && overlay !== "stats" && overlay !== "shop";
+    const digging = this.app.state === GameStates.Digging;
+    if (this.homeNode) this.homeNode.active = hub;
+    if (this.hudNode) this.hudNode.active = hub || digging;
     if (this.treeNode) this.treeNode.active = home && overlay === "tree";
     if (this.statsNode) this.statsNode.active = home && overlay === "stats";
     if (this.shopNode) this.shopNode.active = home && overlay === "shop";
-    if (this.digNode) this.digNode.active = this.app.state === GameStates.Digging;
+    if (this.digNode) this.digNode.active = digging;
     if (this.choiceNode) this.choiceNode.active = this.app.state === GameStates.LayerChoice;
     if (this.resultNode) this.resultNode.active = this.app.state === GameStates.Result;
     if (this.goldLabel) this.goldLabel.string = `金币 ${this.app.save.gold}`;
@@ -253,7 +306,7 @@ export class GameView extends Component {
     if (this.resultLabel) this.resultLabel.string = `本局 +${this.app.lastSettlement?.gold ?? 0} 金`;
     if (this.toolLabel) {
       const tool = this.app.tool;
-      this.toolLabel.string = `当前工具：${tool.nameZh} · ${formLabel(tool.form)}`;
+      this.toolLabel.string = `当前工具：${tool.nameZh} · ${formLabelZh(tool.form)}`;
     }
     if (this.dropLabel) this.dropLabel.string = this.app.lastScoopLog ?? "";
     if (this.toastLabel) this.toastLabel.string = this.app.toast ?? "";
@@ -262,7 +315,10 @@ export class GameView extends Component {
     this.syncStats();
     this.syncShop();
     this.syncBurst();
-    if (this.app.state === GameStates.Digging) this.drawDirt();
+    if (digging) {
+      this.observeDirt();
+      this.drawDigScene();
+    }
   }
 
   private syncWorkers(): void {
@@ -316,7 +372,7 @@ export class GameView extends Component {
       `金币 ${save.gold}`,
       `当前层 ${this.app.currentLayer.nameZh}`,
       `深度 ${Math.floor(this.app.currentDepthMeters)} 米`,
-      `工具 ${tool.nameZh}（${formLabel(tool.form)}）  力${this.app.scoopPowerNow} / ${this.app.scoopIntervalNow.toFixed(2)}s`,
+      `工具 ${tool.nameZh}（${formLabelZh(tool.form)}）  力${this.app.scoopPowerNow} / ${this.app.scoopIntervalNow.toFixed(2)}s`,
       `搜刮度 ${Math.round(save.scrapeProgress * 100)}%`,
       `编制 ${save.workerRoster.length}/${this.app.configs.workers.length} · ${first?.nameZh ?? "无人"}（${crewMark}）`,
       `本期编制产出 土${save.workerPeriodDirt} · 金${save.workerPeriodGold}`,
@@ -330,10 +386,10 @@ export class GameView extends Component {
     const current = this.app.tool;
     const next = this.app.nextTool;
     this.shopBody.string = [
-      `当前：${current.nameZh}（${formLabel(current.form)}）`,
+      `当前：${current.nameZh}（${formLabelZh(current.form)}）`,
       `力 ${current.power} · 间隔 ${current.attackInterval.toFixed(2)}s`,
       next
-        ? `下一把：${next.nameZh}（${formLabel(next.form)}） ${next.price}金`
+        ? `下一把：${next.nameZh}（${formLabelZh(next.form)}） ${next.price}金`
         : "已经是最深的铲。",
       "灶间铲 / 工地铁铲在铺里按序购置。",
     ].join("\n");
@@ -356,21 +412,69 @@ export class GameView extends Component {
     this.burstLabel.string = OVERHEAT_NAME_ZH;
   }
 
-  private drawDirt(): void {
-    if (!this.dirtGfx || !this.app?.dirtField) return;
+  private observeDirt(): void {
+    const field = this.app?.dirtField;
+    if (!field) return;
+    this.feel = noteDirtChange(this.feel, field.clicks, field.remaining, field.max);
+  }
+
+  private drawDigScene(): void {
+    if (!this.app?.dirtField) return;
     const field = this.app.dirtField;
-    const g = this.dirtGfx;
-    g.clear();
-    g.fillColor = hexColor(ThemeConfig.soil3);
-    g.roundRect(-260, -140, 520, 280, 18);
-    g.fill();
-    const ratio = field.max <= 0 ? 0 : field.remaining / field.max;
-    const h = Math.max(8, 260 * ratio);
-    g.fillColor = hexColor(field.color);
-    g.roundRect(-250, -130, 500, h, 14);
-    g.fill();
+    const silhouette = toolSilhouette(this.app.tool.form);
+    const pose = swingPose(this.feel.swingT, this.feel.flashT, silhouette);
+    if (this.dirtGfx) this.paint(this.dirtGfx, dirtDrawCommands(field, this.feel.hitIndex, pose.crackFlash));
+    if (this.progressGfx) this.paint(this.progressGfx, progressBarCommands(dirtProgress01(field)));
+    if (this.toolGfx) this.paint(this.toolGfx, toolDrawCommands(silhouette, pose.crackFlash));
+    if (this.toolNode) {
+      this.toolNode.setPosition(300 + pose.offsetX, 40 + pose.offsetY, 0);
+      this.toolNode.angle = pose.rotationDeg;
+      this.toolNode.setScale(pose.scale, pose.scale, 1);
+    }
     if (this.dirtLabel) {
       this.dirtLabel.string = `剩余土量 ${field.remaining} / ${field.max} · 搜刮 ${Math.round(field.scrape * 100)}%`;
+    }
+  }
+
+  private paint(g: Graphics, cmds: readonly DrawCmd[]): void {
+    g.clear();
+    for (const cmd of cmds) {
+      const alpha = cmd.alpha ?? 255;
+      if (cmd.kind === "fillCircle") {
+        g.fillColor = hexColor(cmd.color, alpha);
+        g.circle(cmd.x, cmd.y, cmd.r);
+        g.fill();
+      } else if (cmd.kind === "fillEllipse") {
+        g.fillColor = hexColor(cmd.color, alpha);
+        g.ellipse(cmd.x, cmd.y, cmd.rx, cmd.ry);
+        g.fill();
+      } else if (cmd.kind === "fillRoundRect") {
+        g.fillColor = hexColor(cmd.color, alpha);
+        g.roundRect(cmd.x, cmd.y, cmd.w, cmd.h, cmd.r);
+        g.fill();
+      } else if (cmd.kind === "fillPoly") {
+        const first = cmd.points[0];
+        if (!first) continue;
+        g.fillColor = hexColor(cmd.color, alpha);
+        g.moveTo(first.x, first.y);
+        for (let i = 1; i < cmd.points.length; i += 1) {
+          const p = cmd.points[i]!;
+          g.lineTo(p.x, p.y);
+        }
+        g.close();
+        g.fill();
+      } else {
+        const first = cmd.points[0];
+        if (!first) continue;
+        g.strokeColor = hexColor(cmd.color, alpha);
+        g.lineWidth = cmd.width;
+        g.moveTo(first.x, first.y);
+        for (let i = 1; i < cmd.points.length; i += 1) {
+          const p = cmd.points[i]!;
+          g.lineTo(p.x, p.y);
+        }
+        g.stroke();
+      }
     }
   }
 
@@ -410,12 +514,4 @@ export class GameView extends Component {
     parent.addChild(node);
     return button;
   }
-}
-
-function formLabel(form: string): string {
-  if (form === "bowl") return "碗";
-  if (form === "shovel") return "铲";
-  if (form === "auger") return "钻铲";
-  if (form === "scoop") return "舀铲";
-  return form;
 }

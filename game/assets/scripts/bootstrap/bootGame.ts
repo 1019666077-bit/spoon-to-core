@@ -30,7 +30,8 @@ export async function bootGame(input: BootInput): Promise<BootResult> {
     saves,
     seed: input.seed,
   });
-  app.enterHome();
+  // Stage 1.5′: first glance is the dirt pit + bowl, not the Home button wall.
+  app.startDigging();
   const persisted = app.persist();
   if (!persisted) {
     loaded.errors.push("boot-persist-failed");
