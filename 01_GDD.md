@@ -1,7 +1,7 @@
 # 《一勺到底 / Spoon to the Core》完整游戏策划案
 
 版本：0.10-empire（增量帝国修订，覆盖 0.9 格挖/背包主轴）  
-工程版本：`0.7.0-empire1`  
+工程版本：`0.7.1-feel`  
 文档用途：立项、程序制作、美术制作、音频制作、测试、上线与后续迭代  
 引擎：Cocos Creator 3.8.8 + TypeScript  
 首发平台：CrazyGames Web Desktop / Web Mobile、Android  

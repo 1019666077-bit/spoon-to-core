@@ -64,13 +64,11 @@ describe("empire stage 0′ state machine", () => {
     assert.equal(canTransition(GameStates.LayerChoice, GameStates.Result), false);
   });
 
-  it("boots into home, starts a dirt-field dig with a bowl, and returns home", async () => {
+  it("boots into digging with a bowl, and Home is only a secondary hub", async () => {
     const app = await boot(21);
-    assert.equal(app.state, GameStates.Home);
+    assert.equal(app.state, GameStates.Digging);
     assert.equal(app.tool.form, "bowl");
     assert.equal(app.save.toolForm, "bowl");
-    app.startDigging();
-    assert.equal(app.state, GameStates.Digging);
     assert.ok(app.dirtField);
     assert.equal(app.dirtField?.layerId, "backyard");
     assert.equal(app.tool.nameZh, "开裂饭碗");
@@ -86,7 +84,6 @@ describe("empire stage 0′ state machine", () => {
 
   it("opens the layer gate when the dirt patch is emptied", async () => {
     const app = await boot(8);
-    app.startDigging();
     assert.ok(app.dirtField);
     app.dirtField = { ...app.dirtField, remaining: 1 };
     assert.equal(app.clickDirtPatch(), true);

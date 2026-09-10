@@ -15,6 +15,8 @@ declare module "cc" {
     addComponent<T>(ctor: new () => T): T;
     getComponent<T>(ctor: new () => T): T | null;
     setPosition(x: number, y: number, z?: number): void;
+    setScale(x: number, y: number, z?: number): void;
+    angle: number;
     on(type: string, callback: (...args: unknown[]) => void, target?: unknown): void;
     removeAllChildren(): void;
     static EventType: {
@@ -65,8 +67,10 @@ declare module "cc" {
     rect(x: number, y: number, w: number, h: number): void;
     roundRect(x: number, y: number, w: number, h: number, r: number): void;
     circle(x: number, y: number, r: number): void;
+    ellipse(x: number, y: number, rx: number, ry: number): void;
     moveTo(x: number, y: number): void;
     lineTo(x: number, y: number): void;
+    close(): void;
     fill(): void;
     stroke(): void;
     clear(): void;

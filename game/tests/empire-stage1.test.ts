@@ -156,7 +156,7 @@ describe("stage 1′ layer three-state", () => {
     assert.notDeepEqual(yardLoot, cityLoot);
 
     const app = await boot(8);
-    app.startDigging();
+    assert.ok(app.dirtField);
     app.dirtField = { ...app.dirtField!, remaining: 1 };
     assert.equal(scrapeReached({ ...app.dirtField!, remaining: 0 }, backyard), true);
     assert.equal(app.clickDirtPatch(), true);
