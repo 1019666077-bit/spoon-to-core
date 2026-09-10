@@ -4,8 +4,16 @@ import type { GameConfigs, LayerConfig, ToolConfig } from "../data/types";
 import { canTransition, GameStates, type GameStateId } from "../domain/GameState";
 import { randomSeed, SeededRandom } from "../domain/SeededRandom";
 import { DigSession } from "../gameplay/DigSession";
+import {
+  clickDirtWithTool,
+  createDirtField,
+  refillDirt,
+  scrapeRatio,
+  type DirtField,
+} from "../gameplay/LayerDirtField";
 import { applyUnlocks, isLayerUnlocked, orderedLayers } from "../gameplay/Layers";
 import { settleRun, type SettlementResult } from "../gameplay/Settlement";
+import { rosterSlots, type WorkerSlot } from "../gameplay/workers";
 import {
   advanceTutorial,
   createTutorial,
@@ -29,7 +37,7 @@ import type { PlatformAdapter } from "../platform/PlatformAdapter";
 import type { SaveManager } from "../save/SaveManager";
 import type { SaveData } from "../save/SaveSchema";
 
-export type HomePanel = "play" | "shop" | "catalog";
+export type HomePanel = "hub" | "crew" | "tree" | "stats" | "play" | "shop" | "catalog";
 
 export type GameAppDeps = {
   platform: PlatformAdapter;
@@ -49,8 +57,9 @@ export class GameApp {
   state: GameStateId = GameStates.Boot;
   rng: SeededRandom;
   settingsOpen = false;
-  homePanel: HomePanel = "play";
+  homePanel: HomePanel = "hub";
   session: DigSession | null = null;
+  dirtField: DirtField | null = null;
   lastSettlement: SettlementResult | null = null;
   unlockedNotice: string[] = [];
   toast: string | null = null;
@@ -128,9 +137,17 @@ export class GameApp {
     return powerWarning(this.save, this.configs, this.save.selectedLayerId);
   }
 
+  get workerSlots(): WorkerSlot[] {
+    return rosterSlots(this.configs, this.save.workerRoster);
+  }
+
+  get currentDepthMeters(): number {
+    return this.save.bestDepthByLayer[this.save.selectedLayerId] ?? this.currentLayer.depthMin;
+  }
+
   enterHome(): void {
     this.session = null;
-    this.homePanel = "play";
+    this.homePanel = "hub";
     this.transition(GameStates.Home);
     this.platform.gameplayStop();
   }
@@ -160,6 +177,8 @@ export class GameApp {
       drinks: this.save.consumableStock.energy_drink ?? 0,
       runId: `run-${this.save.runCount}-${runSeed}`,
     });
+    this.dirtField = createDirtField(this.currentLayer, this.save.scrapeProgress);
+    this.save.toolForm = this.tool.form;
     this.save.runCount += 1;
     this.lastSettlement = null;
     this.settlementApplied = false;
@@ -202,17 +221,86 @@ export class GameApp {
     this.finishRun();
   }
 
-  /** Stage 0 name. Greybox MVP routes through result. */
+  /** Stage 0 name. Greybox MVP routes through result. Empire path uses layer_choice. */
   returnHomeFromDig(): void {
+    if (this.state === GameStates.LayerChoice) {
+      this.returnHomeFromLayer();
+      return;
+    }
     if (this.state === GameStates.Digging) this.returnFromDig();
     else if (this.state === GameStates.Result) this.acknowledgeResult();
+  }
+
+  /** Main empire dig: click the dirt patch. Pure field math, no maze adjacency. */
+  clickDirtPatch(): boolean {
+    if (this.state !== GameStates.Digging || !this.dirtField) return false;
+    this.sfx.unlock();
+    const result = clickDirtWithTool(this.dirtField, this.tool);
+    this.dirtField = result.field;
+    this.save.scrapeProgress = scrapeRatio(result.field);
+    this.save.toolForm = this.tool.form;
+    if (result.dealt > 0) this.sfx.play("hit");
+    if (result.emptied) {
+      this.sfx.play("break");
+      this.enterLayerChoice();
+      return true;
+    }
+    this.persist();
+    this.bump();
+    return result.dealt > 0;
+  }
+
+  enterLayerChoice(): void {
+    if (this.state !== GameStates.Digging) return;
+    this.persistScrape();
+    this.transition(GameStates.LayerChoice);
+    this.platform.gameplayStop();
+    this.sfx.play("ui");
+  }
+
+  /** Layer gate: keep scraping the same field. */
+  continueScavenge(): void {
+    if (this.state !== GameStates.LayerChoice || !this.dirtField) return;
+    this.dirtField = refillDirt(this.dirtField, Math.max(8, Math.floor(this.dirtField.max * 0.35)));
+    this.save.scrapeProgress = scrapeRatio(this.dirtField);
+    this.transition(GameStates.Digging);
+    this.platform.gameplayStart();
+    this.sfx.play("ui");
+    this.persist();
+  }
+
+  /** Layer gate stub: stay on the current layer skin. Full descend lands in stage 1′. */
+  descendLayer(): boolean {
+    if (this.state !== GameStates.LayerChoice) return false;
+    this.flash("下潜占位：阶段 1′ 再接通下一层");
+    this.sfx.play("warn");
+    return false;
+  }
+
+  returnHomeFromLayer(): void {
+    if (this.state !== GameStates.LayerChoice) return;
+    this.persistScrape();
+    this.session = null;
+    this.dirtField = null;
+    this.homePanel = "hub";
+    this.transition(GameStates.Home);
+    this.platform.gameplayStop();
+    this.sfx.play("ui");
+    this.persist();
+  }
+
+  private persistScrape(): void {
+    if (this.dirtField) this.save.scrapeProgress = scrapeRatio(this.dirtField);
+    this.save.toolForm = this.tool.form;
+    this.persist();
   }
 
   acknowledgeResult(): void {
     if (this.state !== GameStates.Result) return;
     this.noteTutorial("settled");
     this.session = null;
-    this.homePanel = "play";
+    this.dirtField = null;
+    this.homePanel = "hub";
     this.transition(GameStates.Home);
     this.platform.gameplayStop();
     this.sfx.play("ui");
@@ -344,7 +432,7 @@ export class GameApp {
   }
 
   setHomePanel(panel: HomePanel): void {
-    this.homePanel = panel;
+    this.homePanel = panel === "play" ? "hub" : panel;
     this.sfx.play("ui");
     this.bump();
   }

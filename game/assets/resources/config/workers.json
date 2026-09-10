@@ -1,0 +1,32 @@
+[
+  {
+    "id": "spore_digger",
+    "nameZh": "牙孢子伴掘虫",
+    "nameEn": "Fangspore Diggerling",
+    "slot": 0,
+    "hirePrice": 80,
+    "digRate": 0.15,
+    "blurbZh": "贴着碗沿啃松土的小型伴掘虫。",
+    "blurbEn": "A small diggerling that gnaws loose soil along the bowl rim."
+  },
+  {
+    "id": "ram_golem",
+    "nameZh": "夯土偶",
+    "nameEn": "Rammed-Earth Effigy",
+    "slot": 1,
+    "hirePrice": 240,
+    "digRate": 0.4,
+    "blurbZh": "用自身重量把土层拍松的泥偶。",
+    "blurbEn": "A clay effigy that loosens strata with its own weight."
+  },
+  {
+    "id": "root_officiant",
+    "nameZh": "根须祭师",
+    "nameEn": "Root-Tendril Officiant",
+    "slot": 2,
+    "hirePrice": 720,
+    "digRate": 0.25,
+    "blurbZh": "用须根探层、替编制诵出土路。",
+    "blurbEn": "Reads the soil with tendrils and marks a path for the crew."
+  }
+]

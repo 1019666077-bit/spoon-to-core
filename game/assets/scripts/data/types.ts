@@ -29,6 +29,10 @@ export type TreasureConfig = {
   color: string;
 };
 
+export const TOOL_FORMS = ["bowl", "shovel", "scoop", "auger"] as const;
+
+export type ToolForm = (typeof TOOL_FORMS)[number];
+
 export type ToolConfig = {
   id: string;
   nameZh: string;
@@ -36,7 +40,13 @@ export type ToolConfig = {
   power: number;
   attackInterval: number;
   price: number;
+  /** Empire growth: start as a bowl, then a shovel, then modified forms. */
+  form: ToolForm;
 };
+
+export const LAYER_PLAY_MODES = ["dirt_field", "legacy_grid"] as const;
+
+export type LayerPlayMode = (typeof LAYER_PLAY_MODES)[number];
 
 export type LayerConfig = {
   id: string;
@@ -50,6 +60,35 @@ export type LayerConfig = {
   recommendedPower: number;
   generator: string;
   hazards: string[];
+  /** Clickable dirt patch HP. Maze generation is a deprioritized leftover. */
+  dirtHp: number;
+  dirtColor: string;
+  scrapeTarget: number;
+  playMode: LayerPlayMode;
+};
+
+export const SKILL_BRANCHES = ["vessel", "crew", "stratum", "hoard", "rift"] as const;
+
+export type SkillBranchId = (typeof SKILL_BRANCHES)[number];
+
+export type WorkerConfig = {
+  id: string;
+  nameZh: string;
+  nameEn: string;
+  slot: number;
+  hirePrice: number;
+  digRate: number;
+  blurbZh: string;
+  blurbEn: string;
+};
+
+export type SkillNodeConfig = {
+  id: string;
+  nameZh: string;
+  nameEn: string;
+  branch: SkillBranchId;
+  requires: string[];
+  tier: number;
 };
 
 export type StaminaUpgradeTier = {
@@ -114,6 +153,8 @@ export type GameConfigs = {
   upgrades: UpgradeConfig;
   consumables: ConsumableConfig[];
   rules: RulesConfig;
+  workers: WorkerConfig[];
+  skillNodes: SkillNodeConfig[];
 };
 
 export const CONFIG_ID_PATTERN = /^[a-z][a-z0-9_]*$/;

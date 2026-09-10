@@ -1,6 +1,11 @@
-export const SAVE_SCHEMA_VERSION = 2;
+import type { ToolForm } from "../data/types";
+
+export const SAVE_SCHEMA_VERSION = 3;
 export const SAVE_KEY = "spoon-to-core.save";
 export const SAVE_BACKUP_KEY = "spoon-to-core.save.bak";
+
+export const STARTING_TOOL_ID = "chipped_bowl";
+export const STARTING_TOOL_FORM: ToolForm = "bowl";
 
 export type QualityId = "broken" | "normal" | "complete" | "museum";
 
@@ -45,6 +50,13 @@ export type SaveData = {
   bestDepthByLayer: Record<string, number>;
   selectedLayerId: string;
   consumableStock: Record<string, number>;
+  /** Hired worker ids (empire roster). */
+  workerRoster: string[];
+  /** Skill nodes the player has committed. Most stay empty in stage 0′. */
+  unlockedSkillNodeIds: string[];
+  toolForm: ToolForm;
+  /** 0–1 scrape progress on the current layer dirt field. */
+  scrapeProgress: number;
 };
 
 export function createDefaultSave(now: number = 0): SaveData {
@@ -52,7 +64,7 @@ export function createDefaultSave(now: number = 0): SaveData {
     schemaVersion: SAVE_SCHEMA_VERSION,
     gold: 0,
     upgrades: {
-      toolId: "rusty_spoon",
+      toolId: STARTING_TOOL_ID,
       staminaLevel: 0,
       backpackLevel: 0,
       radarLevel: 0,
@@ -77,5 +89,30 @@ export function createDefaultSave(now: number = 0): SaveData {
     bestDepthByLayer: {},
     selectedLayerId: "backyard",
     consumableStock: { dynamite: 0, energy_drink: 0 },
+    workerRoster: [],
+    unlockedSkillNodeIds: [],
+    toolForm: STARTING_TOOL_FORM,
+    scrapeProgress: 0,
   };
 }
+
+/** Old spoon ids from schema v1–v2 map onto the bowl → shovel table. */
+export const LEGACY_TOOL_IDS: Record<string, string> = {
+  rusty_spoon: "chipped_bowl",
+  steel_spoon: "hearth_shovel",
+  twin_spoon: "twin_bit_shovel",
+  vibro_spoon: "quake_shovel",
+  turbo_spoon: "whirl_auger",
+  plasma_spoon: "ion_core_shovel",
+  antimatter_spoon: "void_scoop",
+};
+
+export const TOOL_FORM_BY_ID: Record<string, ToolForm> = {
+  chipped_bowl: "bowl",
+  hearth_shovel: "shovel",
+  twin_bit_shovel: "shovel",
+  quake_shovel: "shovel",
+  whirl_auger: "auger",
+  ion_core_shovel: "shovel",
+  void_scoop: "scoop",
+};

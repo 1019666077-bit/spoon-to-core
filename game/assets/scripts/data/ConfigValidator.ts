@@ -1,16 +1,24 @@
 import {
   CONFIG_ID_PATTERN,
+  LAYER_PLAY_MODES,
   RARITIES,
+  SKILL_BRANCHES,
+  TOOL_FORMS,
   type BackpackUpgradeTier,
   type BlockConfig,
   type ConsumableConfig,
   type GameConfigs,
   type LayerConfig,
+  type LayerPlayMode,
   type Rarity,
   type RulesConfig,
+  type SkillBranchId,
+  type SkillNodeConfig,
   type StaminaUpgradeTier,
   type ToolConfig,
+  type ToolForm,
   type TreasureConfig,
+  type WorkerConfig,
 } from "./types";
 
 export type ConfigError = {
@@ -166,7 +174,12 @@ function parseTool(raw: unknown, path: string, errors: ConfigError[]): ToolConfi
     errors.push({ path: `${path}.attackInterval`, message: "attackInterval must be > 0" });
   }
   if (price < 0) errors.push({ path: `${path}.price`, message: "price must be >= 0" });
-  return { id, nameZh, nameEn, power, attackInterval, price };
+  const formRaw = asString(raw.form);
+  if (!formRaw || !(TOOL_FORMS as readonly string[]).includes(formRaw)) {
+    errors.push({ path: `${path}.form`, message: "form must be bowl, shovel, scoop, or auger" });
+    return { id, nameZh, nameEn, power, attackInterval, price, form: "bowl" };
+  }
+  return { id, nameZh, nameEn, power, attackInterval, price, form: formRaw as ToolForm };
 }
 
 function parseWeights(
@@ -265,6 +278,17 @@ function parseLayer(
     });
   }
   const blockWeights = parseWeights(raw.blockWeights, `${path}.blockWeights`, ids, errors);
+  const dirtHp = asFiniteNumber(raw.dirtHp) ?? 40;
+  if (dirtHp < 1) errors.push({ path: `${path}.dirtHp`, message: "dirtHp must be >= 1" });
+  const dirtColor = asString(raw.dirtColor) ?? "#C4A574";
+  const scrapeTarget = asFiniteNumber(raw.scrapeTarget) ?? 1;
+  if (scrapeTarget <= 0) {
+    errors.push({ path: `${path}.scrapeTarget`, message: "scrapeTarget must be > 0" });
+  }
+  const playRaw = asString(raw.playMode) ?? "dirt_field";
+  if (!(LAYER_PLAY_MODES as readonly string[]).includes(playRaw)) {
+    errors.push({ path: `${path}.playMode`, message: "playMode must be dirt_field or legacy_grid" });
+  }
   return {
     id,
     nameZh,
@@ -277,7 +301,85 @@ function parseLayer(
     recommendedPower,
     generator,
     hazards,
+    dirtHp,
+    dirtColor,
+    scrapeTarget,
+    playMode: playRaw as LayerPlayMode,
   };
+}
+
+function parseWorker(raw: unknown, path: string, errors: ConfigError[]): WorkerConfig | null {
+  if (!isRecord(raw)) {
+    errors.push({ path, message: "expected object" });
+    return null;
+  }
+  const id = asString(raw.id);
+  const nameZh = asString(raw.nameZh);
+  const nameEn = asString(raw.nameEn);
+  const slot = asFiniteNumber(raw.slot);
+  const hirePrice = asFiniteNumber(raw.hirePrice);
+  const digRate = asFiniteNumber(raw.digRate);
+  const blurbZh = asString(raw.blurbZh);
+  const blurbEn = asString(raw.blurbEn);
+  if (
+    !id ||
+    !nameZh ||
+    !nameEn ||
+    slot === null ||
+    hirePrice === null ||
+    digRate === null ||
+    !blurbZh ||
+    !blurbEn
+  ) {
+    errors.push({ path, message: "missing worker fields" });
+    return null;
+  }
+  checkId(id, `${path}.id`, errors);
+  if (slot < 0 || !Number.isInteger(slot)) {
+    errors.push({ path: `${path}.slot`, message: "slot must be an integer >= 0" });
+  }
+  if (hirePrice < 0) errors.push({ path: `${path}.hirePrice`, message: "hirePrice must be >= 0" });
+  if (digRate < 0) errors.push({ path: `${path}.digRate`, message: "digRate must be >= 0" });
+  return { id, nameZh, nameEn, slot, hirePrice, digRate, blurbZh, blurbEn };
+}
+
+function parseSkillNode(raw: unknown, path: string, errors: ConfigError[]): SkillNodeConfig | null {
+  if (!isRecord(raw)) {
+    errors.push({ path, message: "expected object" });
+    return null;
+  }
+  const id = asString(raw.id);
+  const nameZh = asString(raw.nameZh);
+  const nameEn = asString(raw.nameEn);
+  const branch = asString(raw.branch);
+  const tier = asFiniteNumber(raw.tier);
+  if (!id || !nameZh || !nameEn || !branch || tier === null) {
+    errors.push({ path, message: "missing id, names, branch, or tier" });
+    return null;
+  }
+  checkId(id, `${path}.id`, errors);
+  if (!(SKILL_BRANCHES as readonly string[]).includes(branch)) {
+    errors.push({ path: `${path}.branch`, message: `unknown branch "${branch}"` });
+  }
+  if (tier < 0 || !Number.isInteger(tier)) {
+    errors.push({ path: `${path}.tier`, message: "tier must be an integer >= 0" });
+  }
+  const requires: string[] = [];
+  if (raw.requires !== undefined) {
+    if (!Array.isArray(raw.requires)) {
+      errors.push({ path: `${path}.requires`, message: "requires must be an array of ids" });
+    } else {
+      raw.requires.forEach((item, i) => {
+        const req = asString(item);
+        if (!req) {
+          errors.push({ path: `${path}.requires[${i}]`, message: "requirement must be a string" });
+          return;
+        }
+        requires.push(req);
+      });
+    }
+  }
+  return { id, nameZh, nameEn, branch: branch as SkillBranchId, requires, tier };
 }
 
 function parseStaminaTier(raw: unknown, path: string, errors: ConfigError[]): StaminaUpgradeTier | null {
@@ -495,6 +597,49 @@ export function validateConfigs(raw: unknown): ConfigValidationResult {
 
   const rules = parseRules(raw.rules, errors);
 
+  const workers: WorkerConfig[] = [];
+  const workerIds = new Set<string>();
+  if (!Array.isArray(raw.workers) || raw.workers.length === 0) {
+    errors.push({ path: "workers", message: "need at least one worker" });
+  } else {
+    raw.workers.forEach((item, i) => {
+      const parsed = parseWorker(item, `workers[${i}]`, errors);
+      if (parsed) {
+        pushUnique(workerIds, parsed.id, `workers[${i}].id`, errors);
+        workers.push(parsed);
+      }
+    });
+  }
+
+  const skillNodes: SkillNodeConfig[] = [];
+  const skillIds = new Set<string>();
+  if (!Array.isArray(raw.skillNodes) || raw.skillNodes.length < 40) {
+    errors.push({ path: "skillNodes", message: "need at least 40 skill nodes" });
+  }
+  if (Array.isArray(raw.skillNodes)) {
+    raw.skillNodes.forEach((item, i) => {
+      const parsed = parseSkillNode(item, `skillNodes[${i}]`, errors);
+      if (parsed) {
+        pushUnique(skillIds, parsed.id, `skillNodes[${i}].id`, errors);
+        skillNodes.push(parsed);
+      }
+    });
+    const branches = new Set(skillNodes.map((node) => node.branch));
+    if (branches.size < 4) {
+      errors.push({ path: "skillNodes", message: "need at least 4 skill branches" });
+    }
+    skillNodes.forEach((node, i) => {
+      node.requires.forEach((req, r) => {
+        if (!skillIds.has(req)) {
+          errors.push({
+            path: `skillNodes[${i}].requires[${r}]`,
+            message: `unknown skill node "${req}"`,
+          });
+        }
+      });
+    });
+  }
+
   if (errors.length > 0) return { ok: false, configs: null, errors };
   return {
     ok: true,
@@ -506,6 +651,8 @@ export function validateConfigs(raw: unknown): ConfigValidationResult {
       upgrades: { stamina, backpack },
       consumables,
       rules,
+      workers,
+      skillNodes,
     },
     errors: [],
   };

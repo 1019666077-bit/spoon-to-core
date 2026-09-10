@@ -35,6 +35,8 @@ describe("GameApp states", () => {
     assert.equal(app.rng.seed, 7);
     assert.equal(app.runSeed, 7);
     assert.ok(app.session);
+    assert.ok(app.dirtField);
+    assert.equal(app.tool.form, "bowl");
     assert.equal(app.session?.map.width, CONFIG_BUNDLE.rules.mapWidth);
     assert.equal(platform.isGameplayActive, true);
   });

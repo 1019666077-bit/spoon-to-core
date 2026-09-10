@@ -2,20 +2,20 @@
 
 This folder is the **official game**. Open it with **Cocos Creator 3.8.8**.
 
-The Grok web preview mounts the same `domain` / `gameplay` / `save` / `platform` modules so the greybox MVP can be played without the editor. That React shell is a preview host, not the shipping runtime.
+Stage **0′** is the click-dirt empire shell: Home hub, a clickable dirt patch, starting **bowl**, worker / skill-tree placeholders, and `layer_choice`. The old grid-dig session is still in the repo for tests, but `GameView` does not use it as the main UI.
 
 ## Open
 
 1. Install Cocos Creator 3.8.8.
 2. Dashboard → Open → this `game/` directory (`package.json` + `assets/` are the project flags).
 3. Open `assets/scenes/boot.scene`.
-4. Preview. `GameBootstrap` is bound on Canvas (`770fbmX1JhNkYdCbu1Y8OQw`). `GameView` mounts under `Canvas/TitleHost`.
+4. Preview. `GameBootstrap` is bound on Canvas. `GameView` mounts under `Canvas/TitleHost`.
 
 `boot.scene` is based on the official Creator 3.8.8 `scene-2d.scene` template (`cocos-engine` tag `v3.8.8`).
 
 ## Tests (no editor)
 
-From this folder, on a fresh machine:
+From this folder:
 
 ```text
 npm install
@@ -29,8 +29,11 @@ Dump `CONFIG_BUNDLE` into `assets/config` + `assets/resources/config`:
 npm run sync-config
 ```
 
-## Greybox MVP (stages 1–5)
+## Greybox (stage 0′)
 
-Playable loop: home → dig a seeded map → pack treasures into a rotatable grid bag → hold return → sell / catalog / upgrades → five underground layers. Color blocks and oscillator SFX only. No live ads or IAP.
+- Home: gold, depth, 开始挖土, three crew berths, 根系图谱, 帝国账册.
+- Dig: click the dirt color block; HUD shows 开裂饭碗 · 碗.
+- Layer gate shell: 继续搜刮 / 下潜 / 回 Home.
+- Save `schemaVersion: 3` with roster, skill nodes, tool form, scrape progress.
 
-Version: `0.5.0-mvp`.
+Version: `0.6.0-empire0`.

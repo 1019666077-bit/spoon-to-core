@@ -1,0 +1,439 @@
+[
+  {
+    "id": "ves_rim_hold",
+    "nameZh": "碗沿扣手",
+    "nameEn": "Rim Hold",
+    "branch": "vessel",
+    "requires": [],
+    "tier": 0
+  },
+  {
+    "id": "ves_clay_temper",
+    "nameZh": "陶泥回火",
+    "nameEn": "Clay Temper",
+    "branch": "vessel",
+    "requires": [
+      "ves_rim_hold"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "ves_haft_bind",
+    "nameZh": "铲柄缠麻",
+    "nameEn": "Haft Bind",
+    "branch": "vessel",
+    "requires": [
+      "ves_clay_temper"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "ves_blade_flare",
+    "nameZh": "铲刃展唇",
+    "nameEn": "Blade Flare",
+    "branch": "vessel",
+    "requires": [
+      "ves_haft_bind"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "ves_twin_ridge",
+    "nameZh": "双脊分土",
+    "nameEn": "Twin Ridge",
+    "branch": "vessel",
+    "requires": [
+      "ves_blade_flare"
+    ],
+    "tier": 4
+  },
+  {
+    "id": "ves_pulse_keel",
+    "nameZh": "震脉龙骨",
+    "nameEn": "Pulse Keel",
+    "branch": "vessel",
+    "requires": [
+      "ves_twin_ridge"
+    ],
+    "tier": 5
+  },
+  {
+    "id": "ves_spiral_bit",
+    "nameZh": "螺钻齿冠",
+    "nameEn": "Spiral Bit",
+    "branch": "vessel",
+    "requires": [
+      "ves_pulse_keel"
+    ],
+    "tier": 6
+  },
+  {
+    "id": "ves_ion_groove",
+    "nameZh": "离子槽道",
+    "nameEn": "Ion Groove",
+    "branch": "vessel",
+    "requires": [
+      "ves_spiral_bit"
+    ],
+    "tier": 7
+  },
+  {
+    "id": "ves_void_lip",
+    "nameZh": "虚空舀唇",
+    "nameEn": "Void Lip",
+    "branch": "vessel",
+    "requires": [
+      "ves_ion_groove"
+    ],
+    "tier": 8
+  },
+  {
+    "id": "ves_form_oath",
+    "nameZh": "器形成约",
+    "nameEn": "Form Oath",
+    "branch": "vessel",
+    "requires": [
+      "ves_void_lip"
+    ],
+    "tier": 9
+  },
+  {
+    "id": "crw_first_berth",
+    "nameZh": "第一编制席",
+    "nameEn": "First Berth",
+    "branch": "crew",
+    "requires": [],
+    "tier": 0
+  },
+  {
+    "id": "crw_spore_hatch",
+    "nameZh": "牙孢破壳",
+    "nameEn": "Spore Hatch",
+    "branch": "crew",
+    "requires": [
+      "crw_first_berth"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "crw_ram_kiln",
+    "nameZh": "夯偶入窑",
+    "nameEn": "Ram Kiln",
+    "branch": "crew",
+    "requires": [
+      "crw_spore_hatch"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "crw_root_chant",
+    "nameZh": "根须颂词",
+    "nameEn": "Root Chant",
+    "branch": "crew",
+    "requires": [
+      "crw_ram_kiln"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "crw_second_berth",
+    "nameZh": "第二编制席",
+    "nameEn": "Second Berth",
+    "branch": "crew",
+    "requires": [
+      "crw_spore_hatch"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "crw_third_berth",
+    "nameZh": "第三编制席",
+    "nameEn": "Third Berth",
+    "branch": "crew",
+    "requires": [
+      "crw_second_berth"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "crw_feed_trough",
+    "nameZh": "饲土槽",
+    "nameEn": "Feed Trough",
+    "branch": "crew",
+    "requires": [
+      "crw_first_berth"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "crw_shift_bell",
+    "nameZh": "换班土铃",
+    "nameEn": "Shift Bell",
+    "branch": "crew",
+    "requires": [
+      "crw_feed_trough"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "crw_overseer_peg",
+    "nameZh": "监工木钉",
+    "nameEn": "Overseer Peg",
+    "branch": "crew",
+    "requires": [
+      "crw_shift_bell",
+      "crw_second_berth"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "crw_colony_hum",
+    "nameZh": "群落低鸣",
+    "nameEn": "Colony Hum",
+    "branch": "crew",
+    "requires": [
+      "crw_overseer_peg",
+      "crw_third_berth"
+    ],
+    "tier": 4
+  },
+  {
+    "id": "str_yard_skin",
+    "nameZh": "后院皮层",
+    "nameEn": "Yard Skin",
+    "branch": "stratum",
+    "requires": [],
+    "tier": 0
+  },
+  {
+    "id": "str_city_vein",
+    "nameZh": "古城岩脉",
+    "nameEn": "City Vein",
+    "branch": "stratum",
+    "requires": [
+      "str_yard_skin"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "str_fossil_bed",
+    "nameZh": "化石床垫",
+    "nameEn": "Fossil Bed",
+    "branch": "stratum",
+    "requires": [
+      "str_city_vein"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "str_brine_shelf",
+    "nameZh": "卤海层架",
+    "nameEn": "Brine Shelf",
+    "branch": "stratum",
+    "requires": [
+      "str_fossil_bed"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "str_core_hearth",
+    "nameZh": "地心灶膛",
+    "nameEn": "Core Hearth",
+    "branch": "stratum",
+    "requires": [
+      "str_brine_shelf"
+    ],
+    "tier": 4
+  },
+  {
+    "id": "str_scrape_dial",
+    "nameZh": "搜刮度盘",
+    "nameEn": "Scrape Dial",
+    "branch": "stratum",
+    "requires": [
+      "str_yard_skin"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "str_gate_linger",
+    "nameZh": "层闸续刮",
+    "nameEn": "Gate Linger",
+    "branch": "stratum",
+    "requires": [
+      "str_scrape_dial"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "str_gate_plunge",
+    "nameZh": "层闸下潜",
+    "nameEn": "Gate Plunge",
+    "branch": "stratum",
+    "requires": [
+      "str_gate_linger"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "str_gate_hearth",
+    "nameZh": "层闸回巢",
+    "nameEn": "Gate Hearth",
+    "branch": "stratum",
+    "requires": [
+      "str_scrape_dial"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "str_depth_notch",
+    "nameZh": "深度刻痕",
+    "nameEn": "Depth Notch",
+    "branch": "stratum",
+    "requires": [
+      "str_core_hearth",
+      "str_gate_plunge"
+    ],
+    "tier": 5
+  },
+  {
+    "id": "hrd_pocket_grit",
+    "nameZh": "衣袋砂金",
+    "nameEn": "Pocket Grit",
+    "branch": "hoard",
+    "requires": [],
+    "tier": 0
+  },
+  {
+    "id": "hrd_glint_lure",
+    "nameZh": "微光诱物",
+    "nameEn": "Glint Lure",
+    "branch": "hoard",
+    "requires": [
+      "hrd_pocket_grit"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "hrd_odd_cache",
+    "nameZh": "怪件窖",
+    "nameEn": "Odd Cache",
+    "branch": "hoard",
+    "requires": [
+      "hrd_glint_lure"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "hrd_catalog_ash",
+    "nameZh": "图鉴灰记",
+    "nameEn": "Catalog Ash",
+    "branch": "hoard",
+    "requires": [
+      "hrd_odd_cache"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "hrd_sale_chalk",
+    "nameZh": "售价粉笔",
+    "nameEn": "Sale Chalk",
+    "branch": "hoard",
+    "requires": [
+      "hrd_pocket_grit"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "hrd_first_tithe",
+    "nameZh": "初见什一",
+    "nameEn": "First Tithe",
+    "branch": "hoard",
+    "requires": [
+      "hrd_sale_chalk"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "hrd_streak_cord",
+    "nameZh": "连掘绳结",
+    "nameEn": "Streak Cord",
+    "branch": "hoard",
+    "requires": [
+      "hrd_first_tithe"
+    ],
+    "tier": 3
+  },
+  {
+    "id": "hrd_museum_echo",
+    "nameZh": "陈列回声",
+    "nameEn": "Museum Echo",
+    "branch": "hoard",
+    "requires": [
+      "hrd_catalog_ash"
+    ],
+    "tier": 4
+  },
+  {
+    "id": "hrd_bulk_sling",
+    "nameZh": "大宗吊袋",
+    "nameEn": "Bulk Sling",
+    "branch": "hoard",
+    "requires": [
+      "hrd_streak_cord"
+    ],
+    "tier": 4
+  },
+  {
+    "id": "hrd_empire_till",
+    "nameZh": "帝国钱匣",
+    "nameEn": "Empire Till",
+    "branch": "hoard",
+    "requires": [
+      "hrd_museum_echo",
+      "hrd_bulk_sling"
+    ],
+    "tier": 5
+  },
+  {
+    "id": "rft_first_crack",
+    "nameZh": "第一道破隙",
+    "nameEn": "First Crack",
+    "branch": "rift",
+    "requires": [
+      "ves_rim_hold"
+    ],
+    "tier": 1
+  },
+  {
+    "id": "rft_shoulder_burst",
+    "nameZh": "肩一瞬爆发",
+    "nameEn": "Shoulder Burst",
+    "branch": "rift",
+    "requires": [
+      "rft_first_crack"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "rft_soil_sigh",
+    "nameZh": "土面长叹",
+    "nameEn": "Soil Sigh",
+    "branch": "rift",
+    "requires": [
+      "rft_first_crack"
+    ],
+    "tier": 2
+  },
+  {
+    "id": "rft_last_push",
+    "nameZh": "末力一舀",
+    "nameEn": "Last Push",
+    "branch": "rift",
+    "requires": [
+      "rft_shoulder_burst",
+      "rft_soil_sigh"
+    ],
+    "tier": 3
+  }
+]
