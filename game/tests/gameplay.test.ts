@@ -190,7 +190,8 @@ describe("drops settlement upgrades tutorial", () => {
     assert.equal(tool.ok, true);
     if (tool.ok) {
       save = tool.save;
-      assert.equal(save.upgrades.toolId, "steel_spoon");
+      assert.equal(save.upgrades.toolId, "hearth_shovel");
+      assert.equal(save.toolForm, "shovel");
     }
     const stam = buyStamina(save, CONFIG_BUNDLE);
     assert.equal(stam.ok, true);

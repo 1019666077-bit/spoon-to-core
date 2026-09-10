@@ -35,7 +35,11 @@
     "generator": "backyard",
     "hazards": [
       "leaky_pipe"
-    ]
+    ],
+    "dirtHp": 40,
+    "dirtColor": "#C4A574",
+    "scrapeTarget": 1,
+    "playMode": "dirt_field"
   },
   {
     "id": "lost_city",
@@ -72,7 +76,11 @@
     "generator": "lost_city",
     "hazards": [
       "falling_rock"
-    ]
+    ],
+    "dirtHp": 80,
+    "dirtColor": "#8B3A2A",
+    "scrapeTarget": 1,
+    "playMode": "dirt_field"
   },
   {
     "id": "dino_grave",
@@ -108,7 +116,11 @@
     "generator": "dino_grave",
     "hazards": [
       "gas_pocket"
-    ]
+    ],
+    "dirtHp": 120,
+    "dirtColor": "#C4A35A",
+    "scrapeTarget": 1,
+    "playMode": "dirt_field"
   },
   {
     "id": "undersea",
@@ -144,7 +156,11 @@
     "generator": "undersea",
     "hazards": [
       "flood"
-    ]
+    ],
+    "dirtHp": 180,
+    "dirtColor": "#2A6B7A",
+    "scrapeTarget": 1,
+    "playMode": "dirt_field"
   },
   {
     "id": "core",
@@ -180,6 +196,10 @@
     "generator": "core",
     "hazards": [
       "heat_wave"
-    ]
+    ],
+    "dirtHp": 260,
+    "dirtColor": "#FF6A2A",
+    "scrapeTarget": 1,
+    "playMode": "dirt_field"
   }
 ]

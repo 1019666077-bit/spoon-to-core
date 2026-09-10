@@ -14,6 +14,8 @@ function cloneSave(save: SaveData): SaveData {
     quests: { ...save.quests },
     settings: { ...save.settings },
     entitlements: { ads: {}, iap: {} },
+    workerRoster: [...save.workerRoster],
+    unlockedSkillNodeIds: [...save.unlockedSkillNodeIds],
   };
 }
 
@@ -52,6 +54,7 @@ export function buyTool(save: SaveData, configs: GameConfigs): BuyResult {
   const copy = cloneSave(save);
   copy.gold -= next.price;
   copy.upgrades.toolId = next.id;
+  copy.toolForm = next.form;
   return { ok: true, save: copy, spent: next.price };
 }
 

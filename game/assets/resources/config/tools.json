@@ -1,58 +1,65 @@
 [
   {
-    "id": "rusty_spoon",
-    "nameZh": "生锈饭勺",
-    "nameEn": "Rusty Spoon",
+    "id": "chipped_bowl",
+    "nameZh": "开裂饭碗",
+    "nameEn": "Chipped Bowl",
     "power": 1,
     "attackInterval": 0.32,
-    "price": 0
+    "price": 0,
+    "form": "bowl"
   },
   {
-    "id": "steel_spoon",
-    "nameZh": "加固钢勺",
-    "nameEn": "Steel Spoon",
+    "id": "hearth_shovel",
+    "nameZh": "灶间铲",
+    "nameEn": "Hearth Shovel",
     "power": 2,
     "attackInterval": 0.3,
-    "price": 150
+    "price": 150,
+    "form": "shovel"
   },
   {
-    "id": "twin_spoon",
-    "nameZh": "双头工程勺",
-    "nameEn": "Twin Engineer Spoon",
+    "id": "twin_bit_shovel",
+    "nameZh": "双脊夯铲",
+    "nameEn": "Twin-Ridge Shovel",
     "power": 3,
     "attackInterval": 0.27,
-    "price": 500
+    "price": 500,
+    "form": "shovel"
   },
   {
-    "id": "vibro_spoon",
-    "nameZh": "震动破岩勺",
-    "nameEn": "Vibro Rock Spoon",
+    "id": "quake_shovel",
+    "nameZh": "震脉铲",
+    "nameEn": "Quake Shovel",
     "power": 5,
     "attackInterval": 0.24,
-    "price": 1400
+    "price": 1400,
+    "form": "shovel"
   },
   {
-    "id": "turbo_spoon",
-    "nameZh": "涡轮钻头勺",
-    "nameEn": "Turbo Drill Spoon",
+    "id": "whirl_auger",
+    "nameZh": "涡旋钻铲",
+    "nameEn": "Whirl Auger",
     "power": 8,
     "attackInterval": 0.2,
-    "price": 4200
+    "price": 4200,
+    "form": "auger"
   },
   {
-    "id": "plasma_spoon",
-    "nameZh": "等离子地心勺",
-    "nameEn": "Plasma Core Spoon",
+    "id": "ion_core_shovel",
+    "nameZh": "离子芯铲",
+    "nameEn": "Ion-Core Shovel",
     "power": 13,
     "attackInterval": 0.16,
-    "price": 12000
+    "price": 12000,
+    "form": "shovel"
   },
   {
-    "id": "antimatter_spoon",
-    "nameZh": "反物质汤勺",
-    "nameEn": "Antimatter Ladle",
+    "id": "void_scoop",
+    "nameZh": "虚空舀铲",
+    "nameEn": "Void Scoop",
     "power": 21,
     "attackInterval": 0.12,
-    "price": 36000
+    "price": 36000,
+    "form": "scoop"
   }
 ]

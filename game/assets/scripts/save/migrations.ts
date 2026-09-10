@@ -1,6 +1,11 @@
+import { TOOL_FORMS, type ToolForm } from "../data/types";
 import {
   createDefaultSave,
+  LEGACY_TOOL_IDS,
   SAVE_SCHEMA_VERSION,
+  STARTING_TOOL_FORM,
+  STARTING_TOOL_ID,
+  TOOL_FORM_BY_ID,
   type CatalogEntry,
   type QualityId,
   type SaveData,
@@ -32,14 +37,26 @@ function bool(value: unknown, fallback: boolean): boolean {
   return typeof value === "boolean" ? value : fallback;
 }
 
+function migrateToolId(rawId: unknown, fallback: string): string {
+  const id = str(rawId, fallback);
+  return LEGACY_TOOL_IDS[id] ?? id;
+}
+
 function migrateUpgrades(raw: unknown, fallback: SaveUpgrades): SaveUpgrades {
-  if (!isRecord(raw)) return { ...fallback };
+  if (!isRecord(raw)) return { ...fallback, toolId: STARTING_TOOL_ID };
   return {
-    toolId: str(raw.toolId, fallback.toolId),
+    toolId: migrateToolId(raw.toolId, fallback.toolId),
     staminaLevel: num(raw.staminaLevel, fallback.staminaLevel, 0),
     backpackLevel: num(raw.backpackLevel, fallback.backpackLevel, 0),
     radarLevel: num(raw.radarLevel, fallback.radarLevel, 0),
   };
+}
+
+function migrateToolForm(raw: unknown, toolId: string): ToolForm {
+  if (typeof raw === "string" && (TOOL_FORMS as readonly string[]).includes(raw)) {
+    return raw as ToolForm;
+  }
+  return TOOL_FORM_BY_ID[toolId] ?? STARTING_TOOL_FORM;
 }
 
 function migrateSettings(raw: unknown, fallback: SaveSettings): SaveSettings {
@@ -127,10 +144,11 @@ export function migrateSave(raw: unknown, now: number = 0): MigrationResult {
     return { save: defaults, migrated: true, errors: ["future-schema"] };
   }
 
+  const upgrades = migrateUpgrades(raw.upgrades, defaults.upgrades);
   const save: SaveData = {
     schemaVersion: SAVE_SCHEMA_VERSION,
     gold: num(raw.gold, defaults.gold, 0),
-    upgrades: migrateUpgrades(raw.upgrades, defaults.upgrades),
+    upgrades,
     unlockedLayerIds: migrateUnlocked(raw.unlockedLayerIds, defaults.unlockedLayerIds),
     catalog: migrateCatalog(raw.catalog),
     quests: isRecord(raw.quests) ? { ...raw.quests } : {},
@@ -145,6 +163,10 @@ export function migrateSave(raw: unknown, now: number = 0): MigrationResult {
     bestDepthByLayer: migrateDepth(raw.bestDepthByLayer),
     selectedLayerId: str(raw.selectedLayerId, defaults.selectedLayerId),
     consumableStock: migrateStock(raw.consumableStock, defaults.consumableStock),
+    workerRoster: migrateStringArray(raw.workerRoster),
+    unlockedSkillNodeIds: migrateStringArray(raw.unlockedSkillNodeIds),
+    toolForm: migrateToolForm(raw.toolForm, upgrades.toolId),
+    scrapeProgress: clamp01(num(raw.scrapeProgress, defaults.scrapeProgress, 0)),
   };
 
   const migrated = version < SAVE_SCHEMA_VERSION;

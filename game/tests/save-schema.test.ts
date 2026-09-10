@@ -14,7 +14,11 @@ describe("save schema and migration", () => {
     const save = createDefaultSave(1000);
     assert.equal(save.schemaVersion, SAVE_SCHEMA_VERSION);
     assert.equal(save.gold, 0);
-    assert.equal(save.upgrades.toolId, "rusty_spoon");
+    assert.equal(save.upgrades.toolId, "chipped_bowl");
+    assert.equal(save.toolForm, "bowl");
+    assert.deepEqual(save.workerRoster, []);
+    assert.deepEqual(save.unlockedSkillNodeIds, []);
+    assert.equal(save.scrapeProgress, 0);
     assert.deepEqual(save.unlockedLayerIds, ["backyard"]);
     assert.equal(save.lastSafeSaveAt, 1000);
     assert.equal(save.tutorialCompleted, false);
@@ -40,10 +44,33 @@ describe("save schema and migration", () => {
       3,
     );
     assert.equal(result.save.schemaVersion, SAVE_SCHEMA_VERSION);
-    assert.equal(result.save.upgrades.toolId, "steel_spoon");
+    assert.equal(result.save.upgrades.toolId, "hearth_shovel");
+    assert.equal(result.save.toolForm, "shovel");
     assert.equal(result.save.upgrades.staminaLevel, 1);
     assert.deepEqual(result.save.catalog, {});
+    assert.deepEqual(result.save.workerRoster, []);
     assert.ok(result.migrated);
+  });
+
+  it("migrates a v2 blob into empire roster / scrape / bowl form", () => {
+    const result = migrateSave(
+      {
+        schemaVersion: 2,
+        gold: 88,
+        upgrades: { toolId: "rusty_spoon", staminaLevel: 0, backpackLevel: 0, radarLevel: 0 },
+        selectedLayerId: "backyard",
+        unlockedLayerIds: ["backyard"],
+      },
+      4,
+    );
+    assert.equal(result.save.schemaVersion, SAVE_SCHEMA_VERSION);
+    assert.equal(result.save.gold, 88);
+    assert.equal(result.save.upgrades.toolId, "chipped_bowl");
+    assert.equal(result.save.toolForm, "bowl");
+    assert.equal(result.save.scrapeProgress, 0);
+    assert.deepEqual(result.save.unlockedSkillNodeIds, []);
+    assert.ok(result.migrated);
+    assert.ok(result.errors.includes("migrated-from-v2"));
   });
 
   it("falls back to defaults on garbage input", () => {
